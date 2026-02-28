@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help Erin & the SCA Community | FDA Action</title>
+<meta property="og:title" content="Help Approve Troriluzole for Erin & the SCA Community">
+<meta property="og:description" content="Send a pre-filled email to FDA leadership urging approval of Troriluzole for Spinocerebellar Ataxia. It takes 60 seconds.">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --warm-white: #FDF9F4;
+    --deep-teal: #1A5C6B;
+    --teal: #2A7F8E;
+    --gold: #C8954A;
+    --gold-light: #E8B96A;
+    --text-dark: #1C2B2D;
+    --text-mid: #3D5558;
+    --text-light: #6B8588;
+    --border: #D4C9B8;
+    --red-accent: #B85042;
+    --green: #2E7D5B;
+    --fb: #1877F2;
+    --wa: #25D366;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--cream); color: var(--text-dark); min-height: 100vh; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--deep-teal) 0%, #0F3D47 60%, #1A2E30 100%);
+    padding: 56px 24px 48px; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(200,149,74,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(42,127,142,0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-ribbon {
+    display: inline-block; background: var(--gold); color: white;
+    font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+    padding: 6px 20px; border-radius: 2px; margin-bottom: 22px;
+  }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px,5vw,52px); color: white; line-height: 1.2; margin-bottom: 14px; position: relative; }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { color: rgba(255,255,255,0.8); font-size: 16px; font-weight: 300; max-width: 580px; margin: 0 auto; line-height: 1.75; }
+  .hero-divider { width: 60px; height: 2px; background: var(--gold); margin: 26px auto 0; opacity: 0.7; }
+
+  /* COUNTER BANNER */
+  .counter-banner { background: var(--deep-teal); padding: 14px 24px; text-align: center; border-bottom: 2px solid var(--gold); }
+  .counter-inner { display: inline-flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .counter-num { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--gold-light); font-weight: 700; line-height: 1; min-width: 55px; display: inline-block; }
+  .counter-label { color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 300; text-align: left; line-height: 1.5; }
+  .counter-label strong { color: white; display: block; font-weight: 600; font-size: 15px; }
+  .counter-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.2); }
+
+  /* CONTAINER */
+  .container { max-width: 780px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* STEPS */
+  .steps { display: flex; margin: 32px 0 24px; }
+  .step { flex: 1; text-align: center; padding: 14px 4px; position: relative; }
+  .step::after { content: '→'; position: absolute; right: -8px; top: 46%; transform: translateY(-50%); color: var(--text-light); font-size: 16px; }
+  .step:last-child::after { display: none; }
+  .step-num { width: 34px; height: 34px; background: var(--deep-teal); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; margin: 0 auto 8px; }
+  .step-text { font-size: 11px; color: var(--text-mid); line-height: 1.4; }
+
+  /* SCA INFO CARD */
+  .info-card {
+    background: var(--warm-white); border: 1px solid var(--border); border-top: 4px solid var(--gold);
+    border-radius: 4px; padding: 34px 38px; margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(26,92,107,0.07);
+  }
+  .info-card h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--deep-teal); margin-bottom: 14px; }
+  .info-card p { color: var(--text-mid); line-height: 1.75; font-size: 15.5px; }
+  .info-card p + p { margin-top: 12px; }
+  .pull-quote {
+    border-left: 3px solid var(--gold); padding: 12px 20px; margin: 18px 0;
+    background: rgba(200,149,74,0.06); font-family: 'Playfair Display', serif;
+    font-style: italic; color: var(--deep-teal); font-size: 16px; line-height: 1.6;
+  }
+
+  /* ACTION SECTION */
+  .action-section {
+    background: white; border: 1px solid var(--border); border-radius: 4px;
+    padding: 34px 38px; margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(26,92,107,0.07);
+  }
+  .action-section h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--deep-teal); margin-bottom: 6px; }
+  .subtitle { color: var(--text-light); font-size: 14px; margin-bottom: 26px; }
+
+  .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 14px; }
+  .form-group { flex: 1; min-width: 150px; }
+  label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 7px; }
+  input[type="text"], input[type="tel"], textarea {
+    width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 3px;
+    font-family: 'Source Serif 4', serif; font-size: 15px; color: var(--text-dark);
+    background: var(--cream); transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+  input:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,127,142,0.12); background: white; }
+  .char-count { text-align: right; font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+  /* PREVIEW EMAIL BUTTON — main CTA */
+  .btn-preview-email {
+    display: block; width: 100%; margin-top: 24px;
+    background: var(--gold); color: white; border: none;
+    padding: 18px 40px; border-radius: 3px; cursor: pointer;
+    font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 600;
+    letter-spacing: 0.4px; text-align: center;
+    box-shadow: 0 4px 18px rgba(200,149,74,0.38);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  }
+  .btn-preview-email:hover { background: #D4A055; box-shadow: 0 6px 22px rgba(200,149,74,0.48); }
+  .btn-preview-email:active { transform: translateY(1px); }
+  .btn-preview-email:disabled { background: #b0a090; box-shadow: none; cursor: not-allowed; }
+
+  .notice { padding: 11px 15px; border-radius: 3px; font-size: 14px; margin-top: 12px; }
+  .notice.error { background: #FFF0EE; border: 1px solid #F5C5BF; color: var(--red-accent); }
+  .notice.info  { background: rgba(42,127,142,0.08); border: 1px solid rgba(42,127,142,0.2); color: var(--deep-teal); }
+  .notice.success { background: #EEF8F3; border: 1px solid #A8D9BE; color: var(--green); }
+
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* THANK YOU */
+  #thankyou-section {
+    display: none; background: white; border: 1px solid var(--border);
+    border-top: 4px solid var(--green); border-radius: 4px;
+    padding: 36px 38px; text-align: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07); margin-bottom: 24px;
+  }
+  .checkmark { width: 64px; height: 64px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 28px; color: white; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+  @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  #thankyou-section h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--deep-teal); margin-bottom: 12px; }
+  #thankyou-section p { color: var(--text-mid); font-size: 15px; line-height: 1.7; max-width: 500px; margin: 0 auto 16px; }
+
+  /* SOCIAL SHARING */
+  .social-section { background: var(--warm-white); border: 1px solid var(--border); border-radius: 4px; padding: 28px 38px; margin-top: 0; text-align: center; }
+  .social-section h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--deep-teal); margin-bottom: 6px; }
+  .social-section p { color: var(--text-light); font-size: 14px; margin-bottom: 20px; }
+  .share-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 3px;
+    font-family: 'Source Serif 4', serif; font-size: 14px; font-weight: 600;
+    color: white; border: none; cursor: pointer; text-decoration: none;
+    transition: opacity 0.15s, transform 0.1s; letter-spacing: 0.3px;
+  }
+  .share-btn:hover { opacity: 0.86; }
+  .share-btn:active { transform: translateY(1px); }
+  .share-btn.facebook  { background: var(--fb); }
+  .share-btn.bluesky   { background: #0085FF; }
+  .share-btn.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+  .share-btn.whatsapp  { background: var(--wa); }
+  .share-btn.emailshare { background: var(--gold); }
+  .share-btn.copylink  { background: var(--text-mid); }
+  .share-btn svg { width: 16px; height: 16px; fill: white; flex-shrink: 0; }
+  .copy-confirm { display: block; margin-top: 10px; font-size: 13px; color: var(--green); opacity: 0; transition: opacity 0.3s; height: 20px; }
+  .copy-confirm.show { opacity: 1; }
+
+  footer { text-align: center; padding: 22px; color: var(--text-light); font-size: 12px; border-top: 1px solid var(--border); margin-top: 16px; }
+  footer a { color: var(--teal); text-decoration: none; }
+
+  @media (max-width: 540px) {
+    .info-card, .action-section, .social-section, #thankyou-section { padding: 22px 18px; }
+    .form-row { flex-direction: column; }
+    .share-buttons { flex-direction: column; align-items: stretch; }
+    .share-btn { justify-content: center; }
+    .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .step::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-ribbon">Rare Disease Advocacy</div>
+  <h1>Help <em>Erin</em> & the<br>SCA Community</h1>
+  <p class="hero-sub">Thank you so much for helping Erin, the Spinocerebellar Ataxia and Rare Disease communities. Please enter your information below to generate an email that will go to FDA Leadership and your representatives.</p>
+  <div class="hero-divider"></div>
+</div>
+
+<!-- COUNTER BANNER -->
+<div class="counter-banner">
+  <div class="counter-inner">
+    <div><span class="counter-num" id="action-count">0</span></div>
+    <div class="counter-divider"></div>
+    <div class="counter-label">
+      <strong>People have taken action</strong>
+      Will you be next? Every email counts.
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-text">Fill in your info & zip code</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">Click Preview Email</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">Your email app opens pre-filled</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">Review & hit Send!</div></div>
+  </div>
+
+  <!-- SCA INFO -->
+  <div class="info-card">
+    <h2>What is Spinocerebellar Ataxia?</h2>
+    <p>Spinocerebellar ataxia (SCA) is a group of hereditary neurodegenerative diseases caused by the progressive degeneration of the cerebellum — the part of the brain that controls movement and coordination. There are more than 40 known genetic subtypes, and together they affect an estimated 150,000 Americans.</p>
+    <div class="pull-quote">"Because the brain cannot regenerate, every day without treatment means irreversible loss — of movement, independence, and time."</div>
+    <p>Early symptoms include difficulty walking, impaired balance, slurred speech, and problems with fine motor tasks such as writing or swallowing. Over time, patients lose the ability to walk independently and often require a wheelchair. Many subtypes also affect vision, cognition, and the ability to speak or swallow safely.</p>
+    <p>SCA is relentlessly progressive. There is currently <strong>no FDA-approved therapy and no cure</strong> for any subtype. Most patients experience a steady decline over 10–25 years, with significantly reduced life expectancy depending on the subtype. SCA Type 3 (SCA3), the most common form worldwide, is typically fatal, with patients often dying in their 50s or 60s from complications such as aspiration pneumonia.</p>
+    <p>Because the brain does not regenerate lost neurons, <strong>every delay in treatment translates directly into permanent, unrecoverable decline.</strong> This is why regulatory flexibility — and drugs like Troriluzole — matter so urgently for patients like Erin.</p>
+  </div>
+
+  <!-- ACTION FORM -->
+  <div class="action-section">
+    <h2>Send Your Message to the FDA</h2>
+    <p class="subtitle">Fill in your details and click <strong>Preview Email</strong> — your email app will open with everything ready to send</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="your-name">Your Full Name *</label>
+        <input type="text" id="your-name" placeholder="Jane Smith" />
+      </div>
+      <div class="form-group" style="max-width:170px">
+        <label for="zip-code">Your Zip Code *</label>
+        <input type="text" id="zip-code" placeholder="e.g. 94501" maxlength="5" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="relationship">Your Relationship to Erin (optional)</label>
+        <input type="text" id="relationship" placeholder="e.g. friend, colleague, neighbor" />
+      </div>
+      <div class="form-group" style="max-width:210px">
+        <label for="your-phone">Your Phone (optional)</label>
+        <input type="tel" id="your-phone" placeholder="(555) 555-5555" />
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:4px">
+      <label for="personal-story">✨ Your Personal Message (optional but powerful!)</label>
+      <textarea id="personal-story" maxlength="600"
+        placeholder="Share your personal connection to Erin, your experience with rare disease, or why this matters to you. This will be added to the email. (Leave blank to skip.)"></textarea>
+      <div class="char-count"><span id="char-remaining">600</span> characters remaining</div>
+    </div>
+
+    <div id="form-notice"></div>
+
+    <button class="btn-preview-email" id="preview-email-btn">
+      ✉️ Preview Email
+    </button>
+  </div>
+
+  <!-- THANK YOU + PASTE INSTRUCTIONS -->
+  <div id="thankyou-section">
+    <div class="checkmark">✓</div>
+    <h2>Almost done — one quick step!</h2>
+
+    <div id="paste-reminder" style="display:none;background:#EEF8F3;border:1px solid #A8D9BE;border-radius:4px;padding:16px 20px;margin:0 auto 20px;max-width:560px;text-align:left;font-size:15px;line-height:1.7;color:#1A4D38;"></div>
+
+    <p>Every message makes a real difference for Erin and the 30+ million Americans living with rare diseases.</p>
+    <p style="font-size:13px;color:var(--text-light);margin-top:8px;">Email app didn't open? <a href="#" id="retry-link" style="color:var(--teal)">Click here to try again</a>.</p>
+
+    <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;">
+      <p style="font-size:13px;color:var(--text-mid);margin-bottom:10px;"><strong>Email body (for reference or manual copy):</strong></p>
+      <button id="copy-body-btn" style="background:var(--deep-teal);color:white;border:none;padding:9px 22px;border-radius:3px;font-family:'Source Serif 4',serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:12px;">Copy Email Body</button>
+      <pre id="fallback-body" style="background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:14px;font-size:12px;line-height:1.6;color:var(--text-mid);white-space:pre-wrap;word-break:break-word;max-height:260px;overflow-y:auto;text-align:left;"></pre>
+    </div>
+  </div>
+
+  <!-- SOCIAL SHARING -->
+  <div class="social-section">
+    <h3>Spread the Word 📢</h3>
+    <p>Share this page — every share could mean another email to the FDA.</p>
+    <div class="share-buttons">
+      <a class="share-btn facebook" href="#" id="share-fb">
+        <svg viewBox="0 0 24 24"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+        Facebook
+      </a>
+      <a class="share-btn bluesky" href="#" id="share-bsky">
+        <svg viewBox="0 0 24 24"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.04.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.016.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.204-.659-.299-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/></svg>
+        Bluesky
+      </a>
+      <a class="share-btn instagram" href="#" id="share-ig">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        Instagram
+      </a>
+      <a class="share-btn whatsapp" href="#" id="share-wa">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <a class="share-btn emailshare" href="#" id="share-email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        Email a Friend
+      </a>
+      <button class="share-btn copylink" id="share-copy">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Copy Link
+      </button>
+    </div>
+    <span class="copy-confirm" id="copy-confirm">✓ Link copied to clipboard!</span>
+  </div>
+
+</div>
+
+<footer>
+  Made with ❤️ for Erin Hoops and the SCA community &nbsp;·&nbsp;
+  <a href="/cdn-cgi/l/email-protection#4421212c2b2b3437042329252d286a272b29"><span class="__cf_email__" data-cfemail="690c0c010606191a290e04080005470a0604">[email&#160;protected]</span></a> &nbsp;·&nbsp; 925-963-7087
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── CONSTANTS ──
+var FDA_TO      = "commissioner@fda.hhs.gov";
+var FDA_CC_BASE = [
+  "steven.kozlowski@fda.hhs.gov",
+  "kaveeta.vasisht@fda.hhs.gov",
+  "TracyBeth.Hoeg@fda.hhs.gov",
+  "vinayak.Prasad@fda.hhs.gov",
+  "druginfo@fda.hhs.gov"
+];
+var EMAIL_SUBJECT = "Urgent: Approve Troriluzole with Regulatory Flexibility";
+var PAGE_URL      = window.location.href;
+var SHARE_TEXT    = "Help Erin & the SCA community! Send a 60-second pre-filled email to FDA leadership urging approval of Troriluzole for Spinocerebellar Ataxia. Please share!";
+
+// ── ACTION COUNTER ──
+function loadCount() {
+  try {
+    var c = parseInt(localStorage.getItem("fda_action_count") || "0");
+    if (isNaN(c) || c < 0) c = 0;
+    animateCount(c);
+  } catch(e) { animateCount(0); }
+}
+function incrementCount() {
+  try {
+    var c = parseInt(localStorage.getItem("fda_action_count") || "0");
+    if (isNaN(c)) c = 0;
+    c++;
+    localStorage.setItem("fda_action_count", c);
+    animateCount(c);
+  } catch(e) {}
+}
+function animateCount(target) {
+  var el    = document.getElementById("action-count");
+  var start = parseInt(el.textContent) || 0;
+  var dur   = 900;
+  var t0    = performance.now();
+  (function step(now) {
+    var p = Math.min((now - t0) / dur, 1);
+    el.textContent = Math.floor(start + (target - start) * p);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  })(performance.now());
+}
+loadCount();
+
+// ── BUILD EMAIL BODY ──
+function buildEmailBody(name, relation, phone, personalMsg) {
+  var personalBlock = personalMsg
+    ? "\n" + personalMsg + "\n"
+    : "";
+
+  return "Dear FDA Leadership, Senators, and Representatives:\n\n"
+    + "My name is " + name + " and I am writing on behalf of my " + relation + " Erin Hoops, who is a patient with a rare disease. We call these diseases \"rare\" because each one is a disease with fewer than 200,000 patients. However, there are more than 7,000 such diseases with over 30 million patients in the US, so as a whole they aren't so rare.\n\n"
+    + "Dr. Makary recently said he wants to see meaningful treatment for neurodegenerative disorders within the next year. Troriluzole is one such treatment, let's get it approved!\n\n"
+    + "Erin has spinocerebellar ataxia type 3 (SCA3), a rare neurodegenerative disease that affects balance, coordination and all voluntary movements including speech and swallowing. There is currently no approved therapy and no cure for this disease.\n\n"
+    + "In her 20s, she was a basketball coach, Coach Hoops. She loved teaching the game and life lessons through the sport she loves. Unfortunately, due to the disease, she lost the ability to run and catch, so she can no longer coach.\n\n"
+    + "Once she stopped coaching, she needed to find a new community, which led her to local bike rides. Over time, biking was getting harder for her to do safely. Two years ago, she was considering getting a trike. Adult trikes have two options: you can be low to the ground and potentially get run over, or you can be higher up but less stable. She was debating between the two options.\n\n"
+    + "18 months ago, she started taking a new drug called Troriluzole. It is completely safe without side effects, but it has yet to get FDA approval. The drug has been completely transformational in her life. Her disease can only get worse since the brain does not regenerate, so she is still not able to coach. However, she has been able to maintain her life without degeneration. She still rides her 2-wheel bike and even did a bike tour around Europe.\n\n"
+    + "Additionally, she went from sleeping 10-12 hours per night to a much more manageable 8-10. Two hours per day is so much more time for life.\n\n"
+    + "This leads me to the problem: the FDA rejected this drug by issuing a complete response letter (CRL) without a plausible path forward. Like Baby KJ, there are not enough patients with SCA to use standard trial design. Most recently, reviewers want there to be a 4th clinical trial with placebo-controlled withdrawal of the drug. With degenerative diseases, this means that the placebo group would get worse and never be able to recover functionality. Progression in this disease means loss of daily functions and premature death. This is unethical to do to real people — people who have jobs, lives, friends, and families.\n\n"
+    + "Again, this drug is completely safe. It is an improved version of an ALS drug called riluzole, which has been approved for 30 years.\n\n"
+    + "Congress has given the FDA the power to use regulatory flexibility for rare diseases and we need Makary and the FDA to make that happen. I'm begging the FDA to focus on safety data and allow patients to decide if the drug is working for them. Patients like Erin, whose dad died from the disease at 44, don't have years to wait for another clinical trial. Not to mention the cost to the manufacturer and the disincentive for rare disease drug development when approval is nearly impossible.\n\n"
+    + "There is a waiver request for her drug, Troriluzole, which could be approved today. There are also 23 other rare disease drugs that were issued complete response letter (CRL) rejections from the FDA since 2025. Makary and the FDA could make 2026 a landmark year by figuring out how to get these drugs across the finish line.\n\n"
+    + "We need urgent action from the FDA. This can be a win for patients as well as proof that the new process at the FDA works.\n\n"
+    + "   1. Approve Troriluzole today by accepting the waiver petition. Troriluzole is completely safe. Patients and doctors see it working. This is an easy win.\n"
+    + "   2. Review the recent rare disease CRLs. If a drug is safe, approve it. If an application for a safe drug needs additional data, work with the developer to get this data after the approval. Our friends' and children's brains don't have time for perfect science — our loved ones are not guinea pigs. Congress recognizes this and granted the FDA regulatory flexibility. Please use this flexibility to help make a difference in millions of lives.\n\n"
+    + "Please contact Erin directly for any additional information:\n"
+    + "Erin Hoops\n"
+    + "925-963-7087\n"
+    + "eehoops@gmail.com\n"
+    + personalBlock + "\n"
+    + "Thank you so much for your time and consideration.\n\n"
+    + "Sincerely,\n"
+    + name + "\n"
+    + (phone ? phone : "");
+}
+
+// ── FIRE MAILTO LINK ──
+function fireMailto(toAddr, ccStr, subject, body) {
+  // The full email body is too long for a mailto URL (browsers cap at ~2000 chars).
+  // Solution: copy body to clipboard silently, then open mailto with only
+  // To / CC / BCC / Subject pre-filled. User pastes body with one keystroke.
+
+  // Step 1 — copy body to clipboard
+  var copied = false;
+  try {
+    navigator.clipboard.writeText(body).then(function() {
+      showPasteReminder(true);
+    }).catch(function() {
+      // Fallback for older browsers
+      fallbackCopy(body);
+      showPasteReminder(false);
+    });
+    copied = true;
+  } catch(e) {
+    fallbackCopy(body);
+    showPasteReminder(false);
+  }
+
+  // Step 2 — open mailto with To/CC/BCC/Subject only (no body in URL)
+  var mailto = "mailto:" + toAddr
+    + "?cc="      + encodeURIComponent(ccStr)
+    + "&bcc="     + encodeURIComponent("eehoops@gmail.com")
+    + "&subject=" + encodeURIComponent(subject);
+
+  var old = document.getElementById("_hidden_mailto");
+  if (old && old.parentNode) old.parentNode.removeChild(old);
+
+  var a = document.createElement("a");
+  a.id   = "_hidden_mailto";
+  a.href = mailto;
+  a.style.cssText = "position:fixed;top:-999px;left:-999px;opacity:0;pointer-events:none;";
+  document.body.appendChild(a);
+  a.click();
+
+  setTimeout(function() {
+    if (a.parentNode) a.parentNode.removeChild(a);
+  }, 3000);
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.cssText = "position:fixed;top:-999px;left:-999px;opacity:0;";
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand("copy"); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function showPasteReminder(clipboardWorked) {
+  var box = document.getElementById("paste-reminder");
+  if (!box) return;
+  if (clipboardWorked) {
+    box.innerHTML = "<strong>&#10003; Email body copied to clipboard!</strong><br>"
+      + "Your email app is opening with To, CC, BCC &amp; Subject already filled in.<br>"
+      + "Click inside the email body area and press "
+      + "<kbd>Ctrl+V</kbd> (Windows) or <kbd>Cmd+V</kbd> (Mac) to paste the full message, then hit Send.";
+  } else {
+    box.innerHTML = "<strong>Your email app is opening.</strong><br>"
+      + "To, CC, BCC &amp; Subject are pre-filled. Please copy the email text shown below and paste it into the body, then hit Send.";
+  }
+  box.style.display = "block";
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+// ── MAIN: PREVIEW EMAIL BUTTON CLICK ──
+window.handlePreviewEmail = function() {
+  var name     = document.getElementById("your-name").value.trim();
+  var zip      = document.getElementById("zip-code").value.trim();
+  var relation = document.getElementById("relationship").value.trim() || "friend";
+  var phone    = document.getElementById("your-phone").value.trim();
+  var personal = document.getElementById("personal-story").value.trim();
+  var notice   = document.getElementById("form-notice");
+  var btn      = document.getElementById("preview-email-btn");
+
+  // Validate
+  if (!name) {
+    notice.innerHTML = '<div class="notice error">Please enter your full name.</div>';
+    document.getElementById("your-name").focus();
+    return;
+  }
+  if (!/^\d{5}$/.test(zip)) {
+    notice.innerHTML = '<div class="notice error">Please enter a valid 5-digit US zip code.</div>';
+    document.getElementById("zip-code").focus();
+    return;
+  }
+
+  notice.innerHTML = "";
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Looking up your representatives&hellip;';
+
+  // Look up congressional reps, then fire the email
+  var apiUrl = "https://civicinfo.googleapis.com/civicinfo/v2/representatives"
+    + "?address=" + encodeURIComponent(zip)
+    + "&levels=country&roles=legislatorUpperBody&roles=legislatorLowerBody"
+    + "&key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFmBWY";
+
+  fetch(apiUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var repEmails = [];
+      if (data.officials) {
+        data.officials.forEach(function(o) {
+          if (o.emails && o.emails[0]) repEmails.push(o.emails[0]);
+        });
+      }
+      sendEmail(name, relation, phone, personal, repEmails);
+    })
+    .catch(function() {
+      // API failed — proceed without reps, just FDA contacts
+      notice.innerHTML = '<div class="notice info">Could not look up representatives automatically — your email will still go to all FDA leadership.</div>';
+      sendEmail(name, relation, phone, personal, []);
+    });
+};
+
+function sendEmail(name, relation, phone, personal, repEmails) {
+  var btn    = document.getElementById("preview-email-btn");
+
+  var ccList = FDA_CC_BASE.concat(repEmails);
+  var ccStr  = ccList.join(", ");
+  var body   = buildEmailBody(name, relation, phone, personal);
+
+  // Store body globally so retry and fallback display can access it
+  window._lastEmailBody = body;
+  window._lastCcStr     = ccStr;
+
+  fireMailto(FDA_TO, ccStr, EMAIL_SUBJECT, body);
+
+  btn.disabled = false;
+  btn.innerHTML = "✉️ Preview Email";
+
+  // Show thank-you
+  var ty = document.getElementById("thankyou-section");
+  ty.style.display = "block";
+  setTimeout(function() {
+    ty.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 200);
+
+  incrementCount();
+
+  // Populate fallback body display
+  var fb = document.getElementById("fallback-body");
+  if (fb) { fb.textContent = body; }
+
+  // Wire up retry link
+  document.getElementById("retry-link").onclick = function(e) {
+    e.preventDefault();
+    fireMailto(FDA_TO, window._lastCcStr, EMAIL_SUBJECT, window._lastEmailBody);
+  };
+
+  // Wire up copy-body button
+  var cbtn = document.getElementById("copy-body-btn");
+  if (cbtn) {
+    cbtn.onclick = function() {
+      navigator.clipboard.writeText(window._lastEmailBody).then(function() {
+        cbtn.textContent = "✓ Copied!";
+        setTimeout(function(){ cbtn.textContent = "Copy Email Body"; }, 2500);
+      }).catch(function(){
+        fallbackCopy(window._lastEmailBody);
+        cbtn.textContent = "✓ Copied!";
+        setTimeout(function(){ cbtn.textContent = "Copy Email Body"; }, 2500);
+      });
+    };
+  }
+}
+
+// ── SOCIAL SHARING ──
+function shareFacebook()  { window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(PAGE_URL), "_blank", "width=600,height=400"); }
+function shareBluesky() {
+  var text = SHARE_TEXT + " " + PAGE_URL;
+  window.open("https://bsky.app/intent/compose?text=" + encodeURIComponent(text), "_blank", "width=600,height=500");
+}
+function shareInstagram() {
+  // Instagram doesn't support direct share links — copy link and prompt user
+  navigator.clipboard.writeText(PAGE_URL).then(function() {
+    alert("Link copied! Open Instagram, create a post or story, and paste the link in your caption to share.");
+  }).catch(function() {
+    prompt("Copy this link and share it on Instagram:", PAGE_URL);
+  });
+}
+function shareWhatsApp()  { window.open("https://wa.me/?text=" + encodeURIComponent(SHARE_TEXT + " " + PAGE_URL), "_blank"); }
+function shareViaEmail()  {
+  var a = document.createElement("a");
+  a.href = "mailto:?subject=" + encodeURIComponent("Please help Erin - send an email to the FDA (60 sec)") + "&body=" + encodeURIComponent(SHARE_TEXT + "\n\n" + PAGE_URL);
+  a.style.cssText = "position:fixed;top:-999px;left:-999px;";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ if(a.parentNode) a.parentNode.removeChild(a); }, 2000);
+}
+function copyLink() {
+  navigator.clipboard.writeText(PAGE_URL).then(function() {
+    var el = document.getElementById("copy-confirm");
+    el.classList.add("show");
+    setTimeout(function() { el.classList.remove("show"); }, 3000);
+  }).catch(function() { prompt("Copy this link:", PAGE_URL); });
+}
+
+// ── EVENT LISTENERS ──
+document.addEventListener("DOMContentLoaded", function() {
+
+  var btn = document.getElementById("preview-email-btn");
+  if (btn) btn.addEventListener("click", window.handlePreviewEmail);
+
+  var ps = document.getElementById("personal-story");
+  if (ps) ps.addEventListener("input", function() {
+    document.getElementById("char-remaining").textContent = 600 - this.value.length;
+  });
+
+  var sfb = document.getElementById("share-fb");
+  if (sfb) sfb.addEventListener("click", function(e){ e.preventDefault(); shareFacebook(); });
+
+  var sbsky = document.getElementById("share-bsky");
+  if (sbsky) sbsky.addEventListener("click", function(e){ e.preventDefault(); shareBluesky(); });
+
+  var sig = document.getElementById("share-ig");
+  if (sig) sig.addEventListener("click", function(e){ e.preventDefault(); shareInstagram(); });
+
+  var swa = document.getElementById("share-wa");
+  if (swa) swa.addEventListener("click", function(e){ e.preventDefault(); shareWhatsApp(); });
+
+  var sem = document.getElementById("share-email");
+  if (sem) sem.addEventListener("click", function(e){ e.preventDefault(); shareViaEmail(); });
+
+  var scp = document.getElementById("share-copy");
+  if (scp) scp.addEventListener("click", copyLink);
+});
+</script>
+</body>
+</html>
