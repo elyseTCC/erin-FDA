@@ -245,6 +245,56 @@
   }
   .step-banner strong { color: var(--gold-light); }
 
+  /* SENATORS BOX */
+  .senators-box {
+    background: white; border: 1px solid var(--border);
+    border-top: 4px solid var(--deep-teal); border-radius: 4px;
+    padding: 26px; margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(26,92,107,0.06);
+  }
+  .senators-box h3 {
+    font-family: 'Playfair Display', serif; font-size: 18px;
+    color: var(--deep-teal); margin-bottom: 6px;
+  }
+  .senators-box .subtitle {
+    font-size: 13px; color: var(--text-light); margin-bottom: 18px;
+  }
+  .senator-card {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    padding: 14px 16px; border: 1px solid var(--border);
+    border-radius: 3px; margin-bottom: 10px;
+    background: var(--cream);
+  }
+  .senator-info { flex: 1; min-width: 180px; }
+  .senator-name { font-weight: 700; font-size: 15px; color: var(--text-dark); }
+  .senator-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .party-D { color: #1a56b0; font-weight: 700; }
+  .party-R { color: #b01a1a; font-weight: 700; }
+  .party-I { color: #6a4fb0; font-weight: 700; }
+  .senator-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-senator-form {
+    background: var(--deep-teal); color: white; border: none;
+    padding: 9px 16px; border-radius: 3px; cursor: pointer;
+    font-family: 'Source Serif 4', serif; font-size: 13px; font-weight: 600;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.2s;
+  }
+  .btn-senator-form:hover { background: var(--teal); }
+  .btn-senator-copy {
+    background: var(--gold); color: white; border: none;
+    padding: 9px 14px; border-radius: 3px; cursor: pointer;
+    font-family: 'Source Serif 4', serif; font-size: 13px; font-weight: 600;
+    transition: background 0.2s;
+  }
+  .btn-senator-copy:hover { background: #D4A055; }
+  .btn-senator-copy.copied { background: var(--green); }
+  .senators-tip {
+    background: rgba(200,149,74,0.08); border: 1px solid rgba(200,149,74,0.3);
+    border-radius: 3px; padding: 10px 14px; font-size: 13px;
+    color: var(--text-mid); margin-top: 12px; line-height: 1.6;
+  }
+
   @media (max-width: 540px) {
     .info-card, .action-section, .social-section, #thankyou-section { padding: 22px 18px; }
     .form-row { flex-direction: column; }
@@ -302,7 +352,7 @@
   <!-- ACTION FORM -->
   <div class="action-section">
     <h2>Send Your Message to the FDA</h2>
-    <p class="subtitle">Fill in your details and click <strong>Preview Email</strong> — your email app will open with everything ready to send</p>
+    <p class="subtitle">Please fill in your details, you can either auto generate an email, or copy the contents into an email</p>
 
     <div class="form-row">
       <div class="form-group">
@@ -368,7 +418,7 @@
       <h3>Email Recipients &amp; Subject</h3>
       <div class="meta-row"><span class="meta-label">To</span><span class="meta-value" id="ep-to"></span></div>
       <div class="meta-row"><span class="meta-label">CC</span><span class="meta-value" id="ep-cc"></span></div>
-      <div class="meta-row"><span class="meta-label">BCC</span><span class="meta-value">eehoops@gmail.com</span></div>
+      <div class="meta-row"><span class="meta-label">BCC</span><span class="meta-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81e4e4e9eeeef1f2c1e6ece0e8edafe2eeec">[email&#160;protected]</a></span></div>
       <div class="meta-row"><span class="meta-label">Subject</span><span class="meta-value">Urgent: Approve Troriluzole with Regulatory Flexibility</span></div>
     </div>
 
@@ -387,7 +437,18 @@
       <button class="btn-open-email" id="btn-open-email-app-2">✉️ Open Email App</button>
     </div>
 
+    <!-- SENATORS BOX -->
+    <div class="senators-box" id="senators-box" style="display:none;">
+      <h3>📬 Also Contact Your Senators &amp; Representative</h3>
+      <p class="subtitle" id="senators-state-line">Based on your zip code</p>
+      <div id="senators-list"></div>
+      <div class="senators-tip">
+        💡 <strong>Tip:</strong> For each contact, click <em>📋 Copy Message</em> first, then <em>Open Contact Form ↗</em>. Paste your message into their <strong>Message</strong> field and submit!
+      </div>
+    </div>
+
   </div>
+
 
 </div><!-- /page-email -->
 
@@ -395,7 +456,1168 @@
   Made with ❤️ for Erin Hoops and the SCA community
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ============================================================
+// SENATOR DATABASE — 119th Congress (2025)
+// Source: senate.gov/general/resources/pdf/senators_phone_list.pdf
+// Contact form URLs follow pattern: https://[lastname].senate.gov/contact
+// ============================================================
+
+var SENATORS = {
+  AL: [
+    { name: "Katie Boyd Britt",    party: "R", url: "https://www.britt.senate.gov/contact" },
+    { name: "Tommy Tuberville",    party: "R", url: "https://www.tuberville.senate.gov/contact" }
+  ],
+  AK: [
+    { name: "Lisa Murkowski",      party: "R", url: "https://www.murkowski.senate.gov/contact" },
+    { name: "Dan Sullivan",        party: "R", url: "https://www.sullivan.senate.gov/contact" }
+  ],
+  AZ: [
+    { name: "Ruben M. Gallego",   party: "D", url: "https://www.gallego.senate.gov/contact" },
+    { name: "Mark Kelly",          party: "D", url: "https://www.kelly.senate.gov/contact" }
+  ],
+  AR: [
+    { name: "John Boozman",        party: "R", url: "https://www.boozman.senate.gov/contact" },
+    { name: "Tom Cotton",          party: "R", url: "https://www.cotton.senate.gov/contact" }
+  ],
+  CA: [
+    { name: "Alex Padilla",        party: "D", url: "https://www.padilla.senate.gov/contact" },
+    { name: "Adam B. Schiff",      party: "D", url: "https://www.schiff.senate.gov/contact" }
+  ],
+  CO: [
+    { name: "Michael F. Bennet",   party: "D", url: "https://www.bennet.senate.gov/contact" },
+    { name: "John W. Hickenlooper",party: "D", url: "https://www.hickenlooper.senate.gov/contact" }
+  ],
+  CT: [
+    { name: "Richard Blumenthal",  party: "D", url: "https://www.blumenthal.senate.gov/contact" },
+    { name: "Christopher Murphy",  party: "D", url: "https://www.murphy.senate.gov/contact" }
+  ],
+  DE: [
+    { name: "Lisa Blunt Rochester",party: "D", url: "https://www.bluntrochester.senate.gov/contact" },
+    { name: "Christopher A. Coons",party: "D", url: "https://www.coons.senate.gov/contact" }
+  ],
+  FL: [
+    { name: "Ashley Moody",        party: "R", url: "https://www.moody.senate.gov/contact" },
+    { name: "Rick Scott",          party: "R", url: "https://www.rickscott.senate.gov/contact" }
+  ],
+  GA: [
+    { name: "Jon Ossoff",          party: "D", url: "https://www.ossoff.senate.gov/contact" },
+    { name: "Raphael G. Warnock",  party: "D", url: "https://www.warnock.senate.gov/contact" }
+  ],
+  HI: [
+    { name: "Mazie K. Hirono",     party: "D", url: "https://www.hirono.senate.gov/contact" },
+    { name: "Brian Schatz",        party: "D", url: "https://www.schatz.senate.gov/contact" }
+  ],
+  ID: [
+    { name: "Mike Crapo",          party: "R", url: "https://www.crapo.senate.gov/contact" },
+    { name: "James E. Risch",      party: "R", url: "https://www.risch.senate.gov/contact" }
+  ],
+  IL: [
+    { name: "Tammy Duckworth",     party: "D", url: "https://www.duckworth.senate.gov/contact" },
+    { name: "Richard J. Durbin",   party: "D", url: "https://www.durbin.senate.gov/contact" }
+  ],
+  IN: [
+    { name: "Jim Banks",           party: "R", url: "https://www.banks.senate.gov/contact" },
+    { name: "Todd Young",          party: "R", url: "https://www.young.senate.gov/contact" }
+  ],
+  IA: [
+    { name: "Joni Ernst",          party: "R", url: "https://www.ernst.senate.gov/contact" },
+    { name: "Chuck Grassley",      party: "R", url: "https://www.grassley.senate.gov/contact" }
+  ],
+  KS: [
+    { name: "Roger Marshall",      party: "R", url: "https://www.marshall.senate.gov/contact" },
+    { name: "Jerry Moran",         party: "R", url: "https://www.moran.senate.gov/contact" }
+  ],
+  KY: [
+    { name: "Mitch McConnell",     party: "R", url: "https://www.mcconnell.senate.gov/contact" },
+    { name: "Rand Paul",           party: "R", url: "https://www.paul.senate.gov/contact" }
+  ],
+  LA: [
+    { name: "Bill Cassidy",        party: "R", url: "https://www.cassidy.senate.gov/contact" },
+    { name: "John Kennedy",        party: "R", url: "https://www.kennedy.senate.gov/contact" }
+  ],
+  ME: [
+    { name: "Susan M. Collins",    party: "R", url: "https://www.collins.senate.gov/contact" },
+    { name: "Angus S. King Jr.",   party: "I", url: "https://www.king.senate.gov/contact" }
+  ],
+  MD: [
+    { name: "Angela D. Alsobrooks",party: "D", url: "https://www.alsobrooks.senate.gov/contact" },
+    { name: "Chris Van Hollen",    party: "D", url: "https://www.vanhollen.senate.gov/contact" }
+  ],
+  MA: [
+    { name: "Edward J. Markey",    party: "D", url: "https://www.markey.senate.gov/contact" },
+    { name: "Elizabeth Warren",    party: "D", url: "https://www.warren.senate.gov/contact" }
+  ],
+  MI: [
+    { name: "Gary C. Peters",      party: "D", url: "https://www.peters.senate.gov/contact" },
+    { name: "Elissa B. Slotkin",   party: "D", url: "https://www.slotkin.senate.gov/contact" }
+  ],
+  MN: [
+    { name: "Amy Klobuchar",       party: "D", url: "https://www.klobuchar.senate.gov/contact" },
+    { name: "Tina Smith",          party: "D", url: "https://www.smith.senate.gov/contact" }
+  ],
+  MS: [
+    { name: "Cindy Hyde-Smith",    party: "R", url: "https://www.hydesmith.senate.gov/contact" },
+    { name: "Roger F. Wicker",     party: "R", url: "https://www.wicker.senate.gov/contact" }
+  ],
+  MO: [
+    { name: "Josh Hawley",         party: "R", url: "https://www.hawley.senate.gov/contact" },
+    { name: "Eric Schmitt",        party: "R", url: "https://www.schmitt.senate.gov/contact" }
+  ],
+  MT: [
+    { name: "Steve Daines",        party: "R", url: "https://www.daines.senate.gov/contact" },
+    { name: "Tim Sheehy",          party: "R", url: "https://www.sheehy.senate.gov/contact" }
+  ],
+  NE: [
+    { name: "Deb Fischer",         party: "R", url: "https://www.fischer.senate.gov/contact" },
+    { name: "Pete Ricketts",       party: "R", url: "https://www.ricketts.senate.gov/contact" }
+  ],
+  NV: [
+    { name: "Catherine Cortez Masto", party: "D", url: "https://www.cortezmasto.senate.gov/contact" },
+    { name: "Jacky Rosen",         party: "D", url: "https://www.rosen.senate.gov/contact" }
+  ],
+  NH: [
+    { name: "Maggie Hassan",       party: "D", url: "https://www.hassan.senate.gov/contact" },
+    { name: "Jeanne Shaheen",      party: "D", url: "https://www.shaheen.senate.gov/contact" }
+  ],
+  NJ: [
+    { name: "Cory A. Booker",      party: "D", url: "https://www.booker.senate.gov/contact" },
+    { name: "Andy Kim",            party: "D", url: "https://www.kim.senate.gov/contact" }
+  ],
+  NM: [
+    { name: "Martin Heinrich",     party: "D", url: "https://www.heinrich.senate.gov/contact" },
+    { name: "Ben Ray Luján",       party: "D", url: "https://www.lujan.senate.gov/contact" }
+  ],
+  NY: [
+    { name: "Kirsten E. Gillibrand",party: "D", url: "https://www.gillibrand.senate.gov/contact" },
+    { name: "Charles E. Schumer",  party: "D", url: "https://www.schumer.senate.gov/contact" }
+  ],
+  NC: [
+    { name: "Ted Budd",            party: "R", url: "https://www.budd.senate.gov/contact" },
+    { name: "Thom Tillis",         party: "R", url: "https://www.tillis.senate.gov/contact" }
+  ],
+  ND: [
+    { name: "Kevin Cramer",        party: "R", url: "https://www.cramer.senate.gov/contact" },
+    { name: "John Hoeven",         party: "R", url: "https://www.hoeven.senate.gov/contact" }
+  ],
+  OH: [
+    { name: "Jon Husted",          party: "R", url: "https://www.husted.senate.gov/contact" },
+    { name: "Bernie F. Moreno",    party: "R", url: "https://www.moreno.senate.gov/contact" }
+  ],
+  OK: [
+    { name: "James Lankford",      party: "R", url: "https://www.lankford.senate.gov/contact" },
+    { name: "Markwayne Mullin",    party: "R", url: "https://www.mullin.senate.gov/contact" }
+  ],
+  OR: [
+    { name: "Jeff Merkley",        party: "D", url: "https://www.merkley.senate.gov/contact" },
+    { name: "Ron Wyden",           party: "D", url: "https://www.wyden.senate.gov/contact" }
+  ],
+  PA: [
+    { name: "John Fetterman",      party: "D", url: "https://www.fetterman.senate.gov/contact" },
+    { name: "David H. McCormick",  party: "R", url: "https://www.mccormick.senate.gov/contact" }
+  ],
+  RI: [
+    { name: "Jack Reed",           party: "D", url: "https://www.reed.senate.gov/contact" },
+    { name: "Sheldon Whitehouse",  party: "D", url: "https://www.whitehouse.senate.gov/contact" }
+  ],
+  SC: [
+    { name: "Lindsey Graham",      party: "R", url: "https://www.graham.senate.gov/contact" },
+    { name: "Tim Scott",           party: "R", url: "https://www.scott.senate.gov/contact" }
+  ],
+  SD: [
+    { name: "Mike Rounds",         party: "R", url: "https://www.rounds.senate.gov/contact" },
+    { name: "John Thune",          party: "R", url: "https://www.thune.senate.gov/contact" }
+  ],
+  TN: [
+    { name: "Marsha Blackburn",    party: "R", url: "https://www.blackburn.senate.gov/contact" },
+    { name: "Bill Hagerty",        party: "R", url: "https://www.hagerty.senate.gov/contact" }
+  ],
+  TX: [
+    { name: "John Cornyn",         party: "R", url: "https://www.cornyn.senate.gov/contact" },
+    { name: "Ted Cruz",            party: "R", url: "https://www.cruz.senate.gov/contact" }
+  ],
+  UT: [
+    { name: "John R. Curtis",      party: "R", url: "https://www.curtis.senate.gov/contact" },
+    { name: "Mike Lee",            party: "R", url: "https://www.lee.senate.gov/contact" }
+  ],
+  VT: [
+    { name: "Bernard Sanders",     party: "I", url: "https://www.sanders.senate.gov/contact" },
+    { name: "Peter Welch",         party: "D", url: "https://www.welch.senate.gov/contact" }
+  ],
+  VA: [
+    { name: "Tim Kaine",           party: "D", url: "https://www.kaine.senate.gov/contact" },
+    { name: "Mark R. Warner",      party: "D", url: "https://www.warner.senate.gov/contact" }
+  ],
+  WA: [
+    { name: "Maria Cantwell",      party: "D", url: "https://www.cantwell.senate.gov/contact" },
+    { name: "Patty Murray",        party: "D", url: "https://www.murray.senate.gov/contact" }
+  ],
+  WV: [
+    { name: "Shelley Moore Capito",party: "R", url: "https://www.capito.senate.gov/contact" },
+    { name: "James C. Justice",    party: "R", url: "https://www.justice.senate.gov/contact" }
+  ],
+  WI: [
+    { name: "Tammy Baldwin",       party: "D", url: "https://www.baldwin.senate.gov/contact" },
+    { name: "Ron Johnson",         party: "R", url: "https://www.ronjohnson.senate.gov/contact" }
+  ],
+  WY: [
+    { name: "John Barrasso",       party: "R", url: "https://www.barrasso.senate.gov/contact" },
+    { name: "Cynthia M. Lummis",   party: "R", url: "https://www.lummis.senate.gov/contact" }
+  ]
+};
+
+// ── ZIP CODE → STATE lookup (first 3 digits of zip) ──
+var ZIP_TO_STATE = {
+  "005":"NY","006":"PR","007":"PR","008":"VI","009":"PR",
+  "010":"MA","011":"MA","012":"MA","013":"MA","014":"MA",
+  "015":"MA","016":"MA","017":"MA","018":"MA","019":"MA",
+  "020":"MA","021":"MA","022":"MA","023":"MA","024":"MA",
+  "025":"MA","026":"MA","027":"MA",
+  "028":"RI","029":"RI",
+  "030":"NH","031":"NH","032":"NH","033":"NH","034":"NH",
+  "035":"NH","036":"NH","037":"NH","038":"NH",
+  "039":"ME","040":"ME","041":"ME","042":"ME","043":"ME",
+  "044":"ME","045":"ME","046":"ME","047":"ME","048":"ME","049":"ME",
+  "050":"VT","051":"VT","052":"VT","053":"VT","054":"VT",
+  "055":"VT","056":"VT","057":"VT","058":"VT","059":"VT",
+  "060":"CT","061":"CT","062":"CT","063":"CT","064":"CT",
+  "065":"CT","066":"CT","067":"CT","068":"CT","069":"CT",
+  "070":"NJ","071":"NJ","072":"NJ","073":"NJ","074":"NJ",
+  "075":"NJ","076":"NJ","077":"NJ","078":"NJ","079":"NJ",
+  "080":"NJ","081":"NJ","082":"NJ","083":"NJ","084":"NJ","085":"NJ","086":"NJ","087":"NJ","088":"NJ","089":"NJ",
+  "100":"NY","101":"NY","102":"NY","103":"NY","104":"NY",
+  "105":"NY","106":"NY","107":"NY","108":"NY","109":"NY",
+  "110":"NY","111":"NY","112":"NY","113":"NY","114":"NY",
+  "115":"NY","116":"NY","117":"NY","118":"NY","119":"NY",
+  "120":"NY","121":"NY","122":"NY","123":"NY","124":"NY",
+  "125":"NY","126":"NY","127":"NY","128":"NY","129":"NY",
+  "130":"NY","131":"NY","132":"NY","133":"NY","134":"NY",
+  "135":"NY","136":"NY","137":"NY","138":"NY","139":"NY",
+  "140":"NY","141":"NY","142":"NY","143":"NY","144":"NY",
+  "145":"NY","146":"NY","147":"NY","148":"NY","149":"NY",
+  "150":"PA","151":"PA","152":"PA","153":"PA","154":"PA",
+  "155":"PA","156":"PA","157":"PA","158":"PA","159":"PA",
+  "160":"PA","161":"PA","162":"PA","163":"PA","164":"PA",
+  "165":"PA","166":"PA","167":"PA","168":"PA","169":"PA",
+  "170":"PA","171":"PA","172":"PA","173":"PA","174":"PA",
+  "175":"PA","176":"PA","177":"PA","178":"PA","179":"PA",
+  "180":"PA","181":"PA","182":"PA","183":"PA","184":"PA",
+  "185":"PA","186":"PA","187":"PA","188":"PA","189":"PA",
+  "190":"PA","191":"PA","192":"PA","193":"PA","194":"PA",
+  "195":"PA","196":"PA",
+  "197":"DE","198":"DE","199":"DE",
+  "200":"DC","201":"VA","202":"DC","203":"DC","204":"DC",
+  "205":"DC","206":"DC","207":"MD","208":"MD","209":"MD",
+  "210":"MD","211":"MD","212":"MD","214":"MD","215":"MD",
+  "216":"MD","217":"MD","218":"MD","219":"MD",
+  "220":"VA","221":"VA","222":"VA","223":"VA","224":"VA",
+  "225":"VA","226":"VA","227":"VA","228":"VA","229":"VA",
+  "230":"VA","231":"VA","232":"VA","233":"VA","234":"VA",
+  "235":"VA","236":"VA","237":"VA","238":"VA","239":"VA",
+  "240":"VA","241":"VA","242":"VA","243":"VA","244":"VA",
+  "245":"VA","246":"VA",
+  "247":"WV","248":"WV","249":"WV","250":"WV","251":"WV",
+  "252":"WV","253":"WV","254":"WV","255":"WV","256":"WV",
+  "257":"WV","258":"WV","259":"WV","260":"WV","261":"WV",
+  "262":"WV","263":"WV","264":"WV","265":"WV","266":"WV",
+  "267":"WV","268":"WV",
+  "270":"NC","271":"NC","272":"NC","273":"NC","274":"NC",
+  "275":"NC","276":"NC","277":"NC","278":"NC","279":"NC",
+  "280":"NC","281":"NC","282":"NC","283":"NC","284":"NC",
+  "285":"NC","286":"NC","287":"NC","288":"NC","289":"NC",
+  "290":"SC","291":"SC","292":"SC","293":"SC","294":"SC",
+  "295":"SC","296":"SC","297":"SC","298":"SC","299":"SC",
+  "300":"GA","301":"GA","302":"GA","303":"GA","304":"GA",
+  "305":"GA","306":"GA","307":"GA","308":"GA","309":"GA",
+  "310":"GA","311":"GA","312":"GA","313":"GA","314":"GA",
+  "315":"GA","316":"GA","317":"GA","318":"GA","319":"GA",
+  "320":"FL","321":"FL","322":"FL","323":"FL","324":"FL",
+  "325":"FL","326":"FL","327":"FL","328":"FL","329":"FL",
+  "330":"FL","331":"FL","332":"FL","333":"FL","334":"FL",
+  "335":"FL","336":"FL","337":"FL","338":"FL",
+  "339":"FL","340":"FL","341":"FL","342":"FL","344":"FL",
+  "346":"FL","347":"FL","349":"FL",
+  "350":"AL","351":"AL","352":"AL","353":"AL","354":"AL",
+  "355":"AL","356":"AL","357":"AL","358":"AL","359":"AL",
+  "360":"AL","361":"AL","362":"AL","363":"AL","364":"AL",
+  "365":"AL","366":"AL","367":"AL","368":"AL","369":"AL",
+  "370":"TN","371":"TN","372":"TN","373":"TN","374":"TN",
+  "375":"TN","376":"TN","377":"TN","378":"TN","379":"TN",
+  "380":"TN","381":"TN","382":"TN","383":"TN","384":"TN",
+  "385":"TN",
+  "386":"MS","387":"MS","388":"MS","389":"MS","390":"MS",
+  "391":"MS","392":"MS","393":"MS","394":"MS","395":"MS",
+  "396":"MS","397":"MS",
+  "398":"GA","399":"GA",
+  "400":"KY","401":"KY","402":"KY","403":"KY","404":"KY",
+  "405":"KY","406":"KY","407":"KY","408":"KY","409":"KY",
+  "410":"KY","411":"KY","412":"KY","413":"KY","414":"KY",
+  "415":"KY","416":"KY","417":"KY","418":"KY",
+  "420":"KY","421":"KY","422":"KY","423":"KY","424":"KY",
+  "425":"KY","426":"KY","427":"KY",
+  "430":"OH","431":"OH","432":"OH","433":"OH","434":"OH",
+  "435":"OH","436":"OH","437":"OH","438":"OH","439":"OH",
+  "440":"OH","441":"OH","442":"OH","443":"OH","444":"OH",
+  "445":"OH","446":"OH","447":"OH","448":"OH","449":"OH",
+  "450":"OH","451":"OH","452":"OH","453":"OH","454":"OH",
+  "455":"OH","456":"OH","457":"OH","458":"OH",
+  "460":"IN","461":"IN","462":"IN","463":"IN","464":"IN",
+  "465":"IN","466":"IN","467":"IN","468":"IN","469":"IN",
+  "470":"IN","471":"IN","472":"IN","473":"IN","474":"IN",
+  "475":"IN","476":"IN","477":"IN","478":"IN","479":"IN",
+  "480":"MI","481":"MI","482":"MI","483":"MI","484":"MI",
+  "485":"MI","486":"MI","487":"MI","488":"MI","489":"MI",
+  "490":"MI","491":"MI","492":"MI","493":"MI","494":"MI",
+  "495":"MI","496":"MI","497":"MI","498":"MI","499":"MI",
+  "500":"IA","501":"IA","502":"IA","503":"IA","504":"IA",
+  "505":"IA","506":"IA","507":"IA","508":"IA","509":"IA",
+  "510":"IA","511":"IA","512":"IA","513":"IA","514":"IA",
+  "515":"IA","516":"IA","520":"IA","521":"IA","522":"IA",
+  "523":"IA","524":"IA","525":"IA","526":"IA","527":"IA",
+  "528":"IA",
+  "530":"WI","531":"WI","532":"WI","534":"WI","535":"WI",
+  "537":"WI","538":"WI","539":"WI","540":"WI","541":"WI",
+  "542":"WI","543":"WI","544":"WI","545":"WI","546":"WI",
+  "547":"WI","548":"WI","549":"WI",
+  "550":"MN","551":"MN","553":"MN","554":"MN","555":"MN",
+  "556":"MN","557":"MN","558":"MN","559":"MN","560":"MN",
+  "561":"MN","562":"MN","563":"MN","564":"MN","565":"MN",
+  "566":"MN","567":"MN",
+  "570":"SD","571":"SD","572":"SD","573":"SD","574":"SD",
+  "575":"SD","576":"SD","577":"SD",
+  "580":"ND","581":"ND","582":"ND","583":"ND","584":"ND",
+  "585":"ND","586":"ND","587":"ND","588":"ND",
+  "590":"MT","591":"MT","592":"MT","593":"MT","594":"MT",
+  "595":"MT","596":"MT","597":"MT","598":"MT","599":"MT",
+  "600":"IL","601":"IL","602":"IL","603":"IL","604":"IL",
+  "605":"IL","606":"IL","607":"IL","608":"IL","609":"IL",
+  "610":"IL","611":"IL","612":"IL","613":"IL","614":"IL",
+  "615":"IL","616":"IL","617":"IL","618":"IL","619":"IL",
+  "620":"IL","621":"IL","622":"IL","623":"IL","624":"IL",
+  "625":"IL","626":"IL","627":"IL","628":"IL","629":"IL",
+  "630":"MO","631":"MO","633":"MO","634":"MO","635":"MO",
+  "636":"MO","637":"MO","638":"MO","639":"MO","640":"MO",
+  "641":"MO","644":"MO","645":"MO","646":"MO","647":"MO",
+  "648":"MO","649":"MO","650":"MO","651":"MO","652":"MO",
+  "653":"MO","654":"MO","655":"MO","656":"MO","657":"MO",
+  "658":"MO",
+  "660":"KS","661":"KS","662":"KS","664":"KS","665":"KS",
+  "666":"KS","667":"KS","668":"KS","669":"KS","670":"KS",
+  "671":"KS","672":"KS","673":"KS","674":"KS","675":"KS",
+  "676":"KS","677":"KS","678":"KS","679":"KS",
+  "680":"NE","681":"NE","683":"NE","684":"NE","685":"NE",
+  "686":"NE","687":"NE","688":"NE","689":"NE","690":"NE",
+  "691":"NE","692":"NE","693":"NE",
+  "700":"LA","701":"LA","703":"LA","704":"LA","705":"LA",
+  "706":"LA","707":"LA","708":"LA","710":"LA","711":"LA",
+  "712":"LA","713":"LA","714":"LA",
+  "716":"AR","717":"AR","718":"AR","719":"AR","720":"AR",
+  "721":"AR","722":"AR","723":"AR","724":"AR","725":"AR",
+  "726":"AR","727":"AR","728":"AR","729":"AR",
+  "730":"OK","731":"OK","733":"OK","734":"OK","735":"OK",
+  "736":"OK","737":"OK","738":"OK","739":"OK","740":"OK",
+  "741":"OK","743":"OK","744":"OK","745":"OK","746":"OK",
+  "747":"OK","748":"OK","749":"OK",
+  "750":"TX","751":"TX","752":"TX","753":"TX","754":"TX",
+  "755":"TX","756":"TX","757":"TX","758":"TX","759":"TX",
+  "760":"TX","761":"TX","762":"TX","763":"TX","764":"TX",
+  "765":"TX","766":"TX","767":"TX","768":"TX","769":"TX",
+  "770":"TX","771":"TX","772":"TX","773":"TX","774":"TX",
+  "775":"TX","776":"TX","777":"TX","778":"TX","779":"TX",
+  "780":"TX","781":"TX","782":"TX","783":"TX","784":"TX",
+  "785":"TX","786":"TX","787":"TX","788":"TX","789":"TX",
+  "790":"TX","791":"TX","792":"TX","793":"TX","794":"TX",
+  "795":"TX","796":"TX","797":"TX","798":"TX","799":"TX",
+  "800":"CO","801":"CO","802":"CO","803":"CO","804":"CO",
+  "805":"CO","806":"CO","807":"CO","808":"CO","809":"CO",
+  "810":"CO","811":"CO","812":"CO","813":"CO","814":"CO",
+  "815":"CO","816":"CO",
+  "820":"WY","821":"WY","822":"WY","823":"WY","824":"WY",
+  "825":"WY","826":"WY","827":"WY","828":"WY","829":"WY",
+  "830":"WY","831":"WY",
+  "832":"ID","833":"ID","834":"ID","835":"ID","836":"ID",
+  "837":"ID","838":"ID",
+  "840":"UT","841":"UT","842":"UT","843":"UT","844":"UT",
+  "845":"UT","846":"UT","847":"UT",
+  "850":"AZ","851":"AZ","852":"AZ","853":"AZ","855":"AZ",
+  "856":"AZ","857":"AZ","859":"AZ","860":"AZ","863":"AZ",
+  "864":"AZ","865":"AZ",
+  "870":"NM","871":"NM","872":"NM","873":"NM","874":"NM",
+  "875":"NM","876":"NM","877":"NM","878":"NM","879":"NM",
+  "880":"NM","881":"NM","882":"NM","883":"NM","884":"NM",
+  "890":"NV","891":"NV","893":"NV","894":"NV","895":"NV",
+  "896":"NV","897":"NV","898":"NV",
+  "900":"CA","901":"CA","902":"CA","903":"CA","904":"CA",
+  "905":"CA","906":"CA","907":"CA","908":"CA","910":"CA",
+  "911":"CA","912":"CA","913":"CA","914":"CA","915":"CA",
+  "916":"CA","917":"CA","918":"CA","919":"CA","920":"CA",
+  "921":"CA","922":"CA","923":"CA","924":"CA","925":"CA",
+  "926":"CA","927":"CA","928":"CA","930":"CA","931":"CA",
+  "932":"CA","933":"CA","934":"CA","935":"CA","936":"CA",
+  "937":"CA","938":"CA","939":"CA","940":"CA","941":"CA",
+  "942":"CA","943":"CA","944":"CA","945":"CA","946":"CA",
+  "947":"CA","948":"CA","949":"CA","950":"CA","951":"CA",
+  "952":"CA","953":"CA","954":"CA","955":"CA","956":"CA",
+  "957":"CA","958":"CA","959":"CA","960":"CA","961":"CA",
+  "967":"HI","968":"HI",
+  "970":"OR","971":"OR","972":"OR","973":"OR","974":"OR",
+  "975":"OR","976":"OR","977":"OR","978":"OR","979":"OR",
+  "980":"WA","981":"WA","982":"WA","983":"WA","984":"WA",
+  "985":"WA","986":"WA","988":"WA","989":"WA","990":"WA",
+  "991":"WA","992":"WA","993":"WA","994":"WA",
+  "995":"AK","996":"AK","997":"AK","998":"AK","999":"AK"
+};
+
+// ── Look up state from zip code ──
+function getStateFromZip(zip) {
+  if (!zip || zip.length < 3) return null;
+  return ZIP_TO_STATE[zip.substring(0, 3)] || null;
+}
+
+// ── Get senators for a zip code ──
+function getSenatorsByZip(zip) {
+  var state = getStateFromZip(zip);
+  if (!state || !SENATORS[state]) return { state: null, senators: [] };
+  return { state: state, senators: SENATORS[state] };
+}
+
+// ── State full names ──
+var STATE_NAMES = {
+  AL:"Alabama",AK:"Alaska",AZ:"Arizona",AR:"Arkansas",CA:"California",
+  CO:"Colorado",CT:"Connecticut",DE:"Delaware",FL:"Florida",GA:"Georgia",
+  HI:"Hawaii",ID:"Idaho",IL:"Illinois",IN:"Indiana",IA:"Iowa",
+  KS:"Kansas",KY:"Kentucky",LA:"Louisiana",ME:"Maine",MD:"Maryland",
+  MA:"Massachusetts",MI:"Michigan",MN:"Minnesota",MS:"Mississippi",MO:"Missouri",
+  MT:"Montana",NE:"Nebraska",NV:"Nevada",NH:"New Hampshire",NJ:"New Jersey",
+  NM:"New Mexico",NY:"New York",NC:"North Carolina",ND:"North Dakota",OH:"Ohio",
+  OK:"Oklahoma",OR:"Oregon",PA:"Pennsylvania",RI:"Rhode Island",SC:"South Carolina",
+  SD:"South Dakota",TN:"Tennessee",TX:"Texas",UT:"Utah",VT:"Vermont",
+  VA:"Virginia",WA:"Washington",WV:"West Virginia",WI:"Wisconsin",WY:"Wyoming",
+  DC:"District of Columbia"
+};
+
+// ============================================================
+// HOUSE OF REPRESENTATIVES DATABASE — 119th Congress (2025-2026)
+// Source: clerk.house.gov/member_info/olm-119.pdf (January 6, 2026)
+// Contact form URLs: https://[lastname].house.gov/contact
+// Republicans in roman; Democrats in italic; vacancies noted
+// ============================================================
+
+var REPRESENTATIVES = {
+  AL: [
+    { district:1, name:"Barry Moore",         party:"R", url:"https://moore.house.gov/contact" },
+    { district:2, name:"Shomari Figures",     party:"D", url:"https://figures.house.gov/contact" },
+    { district:3, name:"Mike Rogers",         party:"R", url:"https://mike-rogers.house.gov/contact" },
+    { district:4, name:"Robert B. Aderholt",  party:"R", url:"https://aderholt.house.gov/contact" },
+    { district:5, name:"Dale W. Strong",      party:"R", url:"https://strong.house.gov/contact" },
+    { district:6, name:"Gary J. Palmer",      party:"R", url:"https://palmer.house.gov/contact" },
+    { district:7, name:"Terri A. Sewell",     party:"D", url:"https://sewell.house.gov/contact" }
+  ],
+  AK: [
+    { district:0, name:"Nicholas J. Begich III", party:"R", url:"https://begich.house.gov/contact" }
+  ],
+  AZ: [
+    { district:1, name:"David Schweikert",    party:"R", url:"https://schweikert.house.gov/contact" },
+    { district:2, name:"Elijah Crane",        party:"R", url:"https://crane.house.gov/contact" },
+    { district:3, name:"Yassamin Ansari",     party:"D", url:"https://ansari.house.gov/contact" },
+    { district:4, name:"Greg Stanton",        party:"D", url:"https://stanton.house.gov/contact" },
+    { district:5, name:"Andy Biggs",          party:"R", url:"https://biggs.house.gov/contact" },
+    { district:6, name:"Juan Ciscomani",      party:"R", url:"https://ciscomani.house.gov/contact" },
+    { district:7, name:"Adelita S. Grijalva", party:"D", url:"https://grijalva.house.gov/contact" },
+    { district:8, name:"Abraham J. Hamadeh", party:"R", url:"https://hamadeh.house.gov/contact" },
+    { district:9, name:"Paul A. Gosar",       party:"R", url:"https://gosar.house.gov/contact" }
+  ],
+  AR: [
+    { district:1, name:"Eric A. Crawford",    party:"R", url:"https://crawford.house.gov/contact" },
+    { district:2, name:"J. French Hill",      party:"R", url:"https://hill.house.gov/contact" },
+    { district:3, name:"Steve Womack",        party:"R", url:"https://womack.house.gov/contact" },
+    { district:4, name:"Bruce Westerman",     party:"R", url:"https://westerman.house.gov/contact" }
+  ],
+  CA: [
+    { district:1,  name:"Vacant",             party:"",  url:"https://www.house.gov/representatives/find-your-representative" },
+    { district:2,  name:"Jared Huffman",      party:"D", url:"https://huffman.house.gov/contact" },
+    { district:3,  name:"Kevin Kiley",        party:"R", url:"https://kiley.house.gov/contact" },
+    { district:4,  name:"Mike Thompson",      party:"D", url:"https://mikethompson.house.gov/contact" },
+    { district:5,  name:"Tom McClintock",     party:"R", url:"https://mcclintock.house.gov/contact" },
+    { district:6,  name:"Ami Bera",           party:"D", url:"https://bera.house.gov/contact" },
+    { district:7,  name:"Doris O. Matsui",    party:"D", url:"https://matsui.house.gov/contact" },
+    { district:8,  name:"John Garamendi",     party:"D", url:"https://garamendi.house.gov/contact" },
+    { district:9,  name:"Josh Harder",        party:"D", url:"https://harder.house.gov/contact" },
+    { district:10, name:"Mark DeSaulnier",    party:"D", url:"https://desaulnier.house.gov/contact" },
+    { district:11, name:"Nancy Pelosi",       party:"D", url:"https://pelosi.house.gov/contact" },
+    { district:12, name:"Lateefah Simon",     party:"D", url:"https://simon.house.gov/contact" },
+    { district:13, name:"Adam Gray",          party:"D", url:"https://gray.house.gov/contact" },
+    { district:14, name:"Eric Swalwell",      party:"D", url:"https://swalwell.house.gov/contact" },
+    { district:15, name:"Kevin Mullin",       party:"D", url:"https://kevinmullin.house.gov/contact" },
+    { district:16, name:"Sam T. Liccardo",    party:"D", url:"https://liccardo.house.gov/contact" },
+    { district:17, name:"Ro Khanna",          party:"D", url:"https://khanna.house.gov/contact" },
+    { district:18, name:"Zoe Lofgren",        party:"D", url:"https://lofgren.house.gov/contact" },
+    { district:19, name:"Jimmy Panetta",      party:"D", url:"https://panetta.house.gov/contact" },
+    { district:20, name:"Vince Fong",         party:"R", url:"https://fong.house.gov/contact" },
+    { district:21, name:"Jim Costa",          party:"D", url:"https://costa.house.gov/contact" },
+    { district:22, name:"David G. Valadao",   party:"R", url:"https://valadao.house.gov/contact" },
+    { district:23, name:"Jay Obernolte",      party:"R", url:"https://obernolte.house.gov/contact" },
+    { district:24, name:"Salud O. Carbajal",  party:"D", url:"https://carbajal.house.gov/contact" },
+    { district:25, name:"Raul Ruiz",          party:"D", url:"https://ruiz.house.gov/contact" },
+    { district:26, name:"Julia Brownley",     party:"D", url:"https://juliabrownley.house.gov/contact" },
+    { district:27, name:"George Whitesides",  party:"D", url:"https://whitesides.house.gov/contact" },
+    { district:28, name:"Judy Chu",           party:"D", url:"https://chu.house.gov/contact" },
+    { district:29, name:"Luz M. Rivas",       party:"D", url:"https://rivas.house.gov/contact" },
+    { district:30, name:"Laura Friedman",     party:"D", url:"https://friedman.house.gov/contact" },
+    { district:31, name:"Gilbert Ray Cisneros Jr.", party:"D", url:"https://cisneros.house.gov/contact" },
+    { district:32, name:"Brad Sherman",       party:"D", url:"https://sherman.house.gov/contact" },
+    { district:33, name:"Pete Aguilar",       party:"D", url:"https://aguilar.house.gov/contact" },
+    { district:34, name:"Jimmy Gomez",        party:"D", url:"https://gomez.house.gov/contact" },
+    { district:35, name:"Norma J. Torres",    party:"D", url:"https://torres.house.gov/contact" },
+    { district:36, name:"Ted Lieu",           party:"D", url:"https://lieu.house.gov/contact" },
+    { district:37, name:"Sydney Kamlager-Dove", party:"D", url:"https://kamlager-dove.house.gov/contact" },
+    { district:38, name:"Linda T. Sánchez",   party:"D", url:"https://lindasanchez.house.gov/contact" },
+    { district:39, name:"Mark Takano",        party:"D", url:"https://takano.house.gov/contact" },
+    { district:40, name:"Young Kim",          party:"R", url:"https://youngkim.house.gov/contact" },
+    { district:41, name:"Ken Calvert",        party:"R", url:"https://calvert.house.gov/contact" },
+    { district:42, name:"Robert Garcia",      party:"D", url:"https://robertgarcia.house.gov/contact" },
+    { district:43, name:"Maxine Waters",      party:"D", url:"https://waters.house.gov/contact" },
+    { district:44, name:"Nanette Diaz Barragán", party:"D", url:"https://barragan.house.gov/contact" },
+    { district:45, name:"Derek Tran",         party:"D", url:"https://tran.house.gov/contact" },
+    { district:46, name:"J. Luis Correa",     party:"D", url:"https://correa.house.gov/contact" },
+    { district:47, name:"Dave Min",           party:"D", url:"https://min.house.gov/contact" },
+    { district:48, name:"Darrell Issa",       party:"R", url:"https://issa.house.gov/contact" },
+    { district:49, name:"Mike Levin",         party:"D", url:"https://mikelevin.house.gov/contact" },
+    { district:50, name:"Scott H. Peters",    party:"D", url:"https://scottpeters.house.gov/contact" },
+    { district:51, name:"Sara Jacobs",        party:"D", url:"https://sarajacobs.house.gov/contact" },
+    { district:52, name:"Juan Vargas",        party:"D", url:"https://vargas.house.gov/contact" }
+  ],
+  CO: [
+    { district:1, name:"Diana DeGette",       party:"D", url:"https://degette.house.gov/contact" },
+    { district:2, name:"Joe Neguse",          party:"D", url:"https://neguse.house.gov/contact" },
+    { district:3, name:"Jeff Hurd",           party:"R", url:"https://hurd.house.gov/contact" },
+    { district:4, name:"Lauren Boebert",      party:"R", url:"https://boebert.house.gov/contact" },
+    { district:5, name:"Jeff Crank",          party:"R", url:"https://crank.house.gov/contact" },
+    { district:6, name:"Jason Crow",          party:"D", url:"https://crow.house.gov/contact" },
+    { district:7, name:"Brittany Pettersen",  party:"D", url:"https://pettersen.house.gov/contact" },
+    { district:8, name:"Gabe Evans",          party:"R", url:"https://evans.house.gov/contact" }
+  ],
+  CT: [
+    { district:1, name:"John B. Larson",      party:"D", url:"https://larson.house.gov/contact" },
+    { district:2, name:"Joe Courtney",        party:"D", url:"https://courtney.house.gov/contact" },
+    { district:3, name:"Rosa L. DeLauro",     party:"D", url:"https://delauro.house.gov/contact" },
+    { district:4, name:"James A. Himes",      party:"D", url:"https://himes.house.gov/contact" },
+    { district:5, name:"Jahana Hayes",        party:"D", url:"https://hayes.house.gov/contact" }
+  ],
+  DE: [
+    { district:0, name:"Sarah McBride",       party:"D", url:"https://mcbride.house.gov/contact" }
+  ],
+  FL: [
+    { district:1,  name:"Jimmy Patronis",     party:"R", url:"https://patronis.house.gov/contact" },
+    { district:2,  name:"Neal P. Dunn",       party:"R", url:"https://dunn.house.gov/contact" },
+    { district:3,  name:"Kat Cammack",        party:"R", url:"https://cammack.house.gov/contact" },
+    { district:4,  name:"Aaron Bean",         party:"R", url:"https://bean.house.gov/contact" },
+    { district:5,  name:"John H. Rutherford", party:"R", url:"https://rutherford.house.gov/contact" },
+    { district:6,  name:"Randy Fine",         party:"R", url:"https://fine.house.gov/contact" },
+    { district:7,  name:"Cory Mills",         party:"R", url:"https://mills.house.gov/contact" },
+    { district:8,  name:"Mike Haridopolos",   party:"R", url:"https://haridopolos.house.gov/contact" },
+    { district:9,  name:"Darren Soto",        party:"D", url:"https://soto.house.gov/contact" },
+    { district:10, name:"Maxwell Frost",      party:"D", url:"https://frost.house.gov/contact" },
+    { district:11, name:"Daniel Webster",     party:"R", url:"https://webster.house.gov/contact" },
+    { district:12, name:"Gus M. Bilirakis",   party:"R", url:"https://bilirakis.house.gov/contact" },
+    { district:13, name:"Anna Paulina Luna",  party:"R", url:"https://luna.house.gov/contact" },
+    { district:14, name:"Kathy Castor",       party:"D", url:"https://castor.house.gov/contact" },
+    { district:15, name:"Laurel M. Lee",      party:"R", url:"https://laurellee.house.gov/contact" },
+    { district:16, name:"Vern Buchanan",      party:"R", url:"https://buchanan.house.gov/contact" },
+    { district:17, name:"W. Gregory Steube",  party:"R", url:"https://steube.house.gov/contact" },
+    { district:18, name:"Scott Franklin",     party:"R", url:"https://franklin.house.gov/contact" },
+    { district:19, name:"Byron Donalds",      party:"R", url:"https://donalds.house.gov/contact" },
+    { district:20, name:"Sheila Cherfilus-McCormick", party:"D", url:"https://cherfilus-mccormick.house.gov/contact" },
+    { district:21, name:"Brian J. Mast",      party:"R", url:"https://mast.house.gov/contact" },
+    { district:22, name:"Lois Frankel",       party:"D", url:"https://frankel.house.gov/contact" },
+    { district:23, name:"Jared Moskowitz",    party:"D", url:"https://moskowitz.house.gov/contact" },
+    { district:24, name:"Frederica S. Wilson",party:"D", url:"https://wilson.house.gov/contact" },
+    { district:25, name:"Debbie Wasserman Schultz", party:"D", url:"https://wassermanschultz.house.gov/contact" },
+    { district:26, name:"Mario Diaz-Balart",  party:"R", url:"https://diaz-balart.house.gov/contact" },
+    { district:27, name:"Maria Elvira Salazar",party:"R", url:"https://salazar.house.gov/contact" },
+    { district:28, name:"Carlos A. Gimenez",  party:"R", url:"https://gimenez.house.gov/contact" }
+  ],
+  GA: [
+    { district:1,  name:"Earl L. Carter",     party:"R", url:"https://buddycarter.house.gov/contact" },
+    { district:2,  name:"Sanford D. Bishop Jr.", party:"D", url:"https://bishop.house.gov/contact" },
+    { district:3,  name:"Brian Jack",         party:"R", url:"https://jack.house.gov/contact" },
+    { district:4,  name:"Henry C. Johnson Jr.",party:"D", url:"https://hankjohnson.house.gov/contact" },
+    { district:5,  name:"Nikema Williams",    party:"D", url:"https://nikemawilliams.house.gov/contact" },
+    { district:6,  name:"Lucy McBath",        party:"D", url:"https://mcbath.house.gov/contact" },
+    { district:7,  name:"Richard McCormick",  party:"R", url:"https://mccormick.house.gov/contact" },
+    { district:8,  name:"Austin Scott",       party:"R", url:"https://austinscott.house.gov/contact" },
+    { district:9,  name:"Andrew S. Clyde",    party:"R", url:"https://clyde.house.gov/contact" },
+    { district:10, name:"Mike Collins",       party:"R", url:"https://mikecollins.house.gov/contact" },
+    { district:11, name:"Barry Loudermilk",   party:"R", url:"https://loudermilk.house.gov/contact" },
+    { district:12, name:"Rick W. Allen",      party:"R", url:"https://allen.house.gov/contact" },
+    { district:13, name:"David Scott",        party:"D", url:"https://davidscott.house.gov/contact" },
+    { district:14, name:"Vacant",             party:"",  url:"https://www.house.gov/representatives/find-your-representative" }
+  ],
+  HI: [
+    { district:1, name:"Ed Case",             party:"D", url:"https://case.house.gov/contact" },
+    { district:2, name:"Jill N. Tokuda",      party:"D", url:"https://tokuda.house.gov/contact" }
+  ],
+  ID: [
+    { district:1, name:"Russ Fulcher",        party:"R", url:"https://fulcher.house.gov/contact" },
+    { district:2, name:"Michael K. Simpson",  party:"R", url:"https://simpson.house.gov/contact" }
+  ],
+  IL: [
+    { district:1,  name:"Jonathan L. Jackson",party:"D", url:"https://jackson.house.gov/contact" },
+    { district:2,  name:"Robin L. Kelly",     party:"D", url:"https://robinkelly.house.gov/contact" },
+    { district:3,  name:"Delia C. Ramirez",   party:"D", url:"https://ramirez.house.gov/contact" },
+    { district:4,  name:"Jesús G. García",    party:"D", url:"https://chuygarcia.house.gov/contact" },
+    { district:5,  name:"Mike Quigley",       party:"D", url:"https://quigley.house.gov/contact" },
+    { district:6,  name:"Sean Casten",        party:"D", url:"https://casten.house.gov/contact" },
+    { district:7,  name:"Danny K. Davis",     party:"D", url:"https://davis.house.gov/contact" },
+    { district:8,  name:"Raja Krishnamoorthi",party:"D", url:"https://krishnamoorthi.house.gov/contact" },
+    { district:9,  name:"Janice D. Schakowsky",party:"D", url:"https://schakowsky.house.gov/contact" },
+    { district:10, name:"Bradley Scott Schneider", party:"D", url:"https://schneider.house.gov/contact" },
+    { district:11, name:"Bill Foster",        party:"D", url:"https://foster.house.gov/contact" },
+    { district:12, name:"Mike Bost",          party:"R", url:"https://bost.house.gov/contact" },
+    { district:13, name:"Nikki Budzinski",    party:"D", url:"https://budzinski.house.gov/contact" },
+    { district:14, name:"Lauren Underwood",   party:"D", url:"https://underwood.house.gov/contact" },
+    { district:15, name:"Mary E. Miller",     party:"R", url:"https://miller.house.gov/contact" },
+    { district:16, name:"Darin LaHood",       party:"R", url:"https://lahood.house.gov/contact" },
+    { district:17, name:"Eric Sorensen",      party:"D", url:"https://sorensen.house.gov/contact" }
+  ],
+  IN: [
+    { district:1, name:"Frank J. Mrvan",      party:"D", url:"https://mrvan.house.gov/contact" },
+    { district:2, name:"Rudy Yakym III",      party:"R", url:"https://yakym.house.gov/contact" },
+    { district:3, name:"Marlin A. Stutzman",  party:"R", url:"https://stutzman.house.gov/contact" },
+    { district:4, name:"James R. Baird",      party:"R", url:"https://baird.house.gov/contact" },
+    { district:5, name:"Victoria Spartz",     party:"R", url:"https://spartz.house.gov/contact" },
+    { district:6, name:"Jefferson Shreve",    party:"R", url:"https://shreve.house.gov/contact" },
+    { district:7, name:"André Carson",        party:"D", url:"https://carson.house.gov/contact" },
+    { district:8, name:"Mark B. Messmer",     party:"R", url:"https://messmer.house.gov/contact" },
+    { district:9, name:"Erin Houchin",        party:"R", url:"https://houchin.house.gov/contact" }
+  ],
+  IA: [
+    { district:1, name:"Mariannette Miller-Meeks", party:"R", url:"https://miller-meeks.house.gov/contact" },
+    { district:2, name:"Ashley Hinson",       party:"R", url:"https://hinson.house.gov/contact" },
+    { district:3, name:"Zachary Nunn",        party:"R", url:"https://nunn.house.gov/contact" },
+    { district:4, name:"Randy Feenstra",      party:"R", url:"https://feenstra.house.gov/contact" }
+  ],
+  KS: [
+    { district:1, name:"Tracey Mann",         party:"R", url:"https://mann.house.gov/contact" },
+    { district:2, name:"Derek Schmidt",       party:"R", url:"https://schmidt.house.gov/contact" },
+    { district:3, name:"Sharice Davids",      party:"D", url:"https://davids.house.gov/contact" },
+    { district:4, name:"Ron Estes",           party:"R", url:"https://estes.house.gov/contact" }
+  ],
+  KY: [
+    { district:1, name:"James Comer",         party:"R", url:"https://comer.house.gov/contact" },
+    { district:2, name:"Brett Guthrie",       party:"R", url:"https://guthrie.house.gov/contact" },
+    { district:3, name:"Morgan McGarvey",     party:"D", url:"https://mcgarvey.house.gov/contact" },
+    { district:4, name:"Thomas Massie",       party:"R", url:"https://massie.house.gov/contact" },
+    { district:5, name:"Harold Rogers",       party:"R", url:"https://halrogers.house.gov/contact" },
+    { district:6, name:"Andy Barr",           party:"R", url:"https://barr.house.gov/contact" }
+  ],
+  LA: [
+    { district:1, name:"Steve Scalise",       party:"R", url:"https://scalise.house.gov/contact" },
+    { district:2, name:"Troy A. Carter",      party:"D", url:"https://troycarter.house.gov/contact" },
+    { district:3, name:"Clay Higgins",        party:"R", url:"https://clayhiggins.house.gov/contact" },
+    { district:4, name:"Mike Johnson",        party:"R", url:"https://mikejohnson.house.gov/contact" },
+    { district:5, name:"Julia Letlow",        party:"R", url:"https://letlow.house.gov/contact" },
+    { district:6, name:"Cleo Fields",         party:"D", url:"https://fields.house.gov/contact" }
+  ],
+  ME: [
+    { district:1, name:"Chellie Pingree",     party:"D", url:"https://pingree.house.gov/contact" },
+    { district:2, name:"Jared F. Golden",     party:"D", url:"https://golden.house.gov/contact" }
+  ],
+  MD: [
+    { district:1, name:"Andy Harris",         party:"R", url:"https://harris.house.gov/contact" },
+    { district:2, name:"Johnny Olszewski Jr.",party:"D", url:"https://olszewski.house.gov/contact" },
+    { district:3, name:"Sarah Elfreth",       party:"D", url:"https://elfreth.house.gov/contact" },
+    { district:4, name:"Glenn Ivey",          party:"D", url:"https://ivey.house.gov/contact" },
+    { district:5, name:"Steny H. Hoyer",      party:"D", url:"https://hoyer.house.gov/contact" },
+    { district:6, name:"April McClain Delaney",party:"D", url:"https://delaney.house.gov/contact" },
+    { district:7, name:"Kweisi Mfume",        party:"D", url:"https://mfume.house.gov/contact" },
+    { district:8, name:"Jamie Raskin",        party:"D", url:"https://raskin.house.gov/contact" }
+  ],
+  MA: [
+    { district:1, name:"Richard E. Neal",     party:"D", url:"https://neal.house.gov/contact" },
+    { district:2, name:"James P. McGovern",   party:"D", url:"https://mcgovern.house.gov/contact" },
+    { district:3, name:"Lori Trahan",         party:"D", url:"https://trahan.house.gov/contact" },
+    { district:4, name:"Jake Auchincloss",    party:"D", url:"https://auchincloss.house.gov/contact" },
+    { district:5, name:"Katherine M. Clark",  party:"D", url:"https://katherineclark.house.gov/contact" },
+    { district:6, name:"Seth Moulton",        party:"D", url:"https://moulton.house.gov/contact" },
+    { district:7, name:"Ayanna Pressley",     party:"D", url:"https://pressley.house.gov/contact" },
+    { district:8, name:"Stephen F. Lynch",    party:"D", url:"https://lynch.house.gov/contact" },
+    { district:9, name:"William R. Keating",  party:"D", url:"https://keating.house.gov/contact" }
+  ],
+  MI: [
+    { district:1,  name:"Jack Bergman",       party:"R", url:"https://bergman.house.gov/contact" },
+    { district:2,  name:"John R. Moolenaar",  party:"R", url:"https://moolenaar.house.gov/contact" },
+    { district:3,  name:"Hillary J. Scholten",party:"D", url:"https://scholten.house.gov/contact" },
+    { district:4,  name:"Bill Huizenga",      party:"R", url:"https://huizenga.house.gov/contact" },
+    { district:5,  name:"Tim Walberg",        party:"R", url:"https://walberg.house.gov/contact" },
+    { district:6,  name:"Debbie Dingell",     party:"D", url:"https://debbiedingell.house.gov/contact" },
+    { district:7,  name:"Tom Barrett",        party:"R", url:"https://barrett.house.gov/contact" },
+    { district:8,  name:"Kristen McDonald Rivet", party:"D", url:"https://mcdonaldrivet.house.gov/contact" },
+    { district:9,  name:"Lisa C. McClain",    party:"R", url:"https://mcclain.house.gov/contact" },
+    { district:10, name:"John James",         party:"R", url:"https://johnjames.house.gov/contact" },
+    { district:11, name:"Haley M. Stevens",   party:"D", url:"https://haleystevens.house.gov/contact" },
+    { district:12, name:"Rashida Tlaib",      party:"D", url:"https://tlaib.house.gov/contact" },
+    { district:13, name:"Shri Thanedar",      party:"D", url:"https://thanedar.house.gov/contact" }
+  ],
+  MN: [
+    { district:1, name:"Brad Finstad",        party:"R", url:"https://finstad.house.gov/contact" },
+    { district:2, name:"Angie Craig",         party:"D", url:"https://craig.house.gov/contact" },
+    { district:3, name:"Kelly Morrison",      party:"D", url:"https://morrison.house.gov/contact" },
+    { district:4, name:"Betty McCollum",      party:"D", url:"https://mccollum.house.gov/contact" },
+    { district:5, name:"Ilhan Omar",          party:"D", url:"https://omar.house.gov/contact" },
+    { district:6, name:"Tom Emmer",           party:"R", url:"https://emmer.house.gov/contact" },
+    { district:7, name:"Michelle Fischbach",  party:"R", url:"https://fischbach.house.gov/contact" },
+    { district:8, name:"Pete Stauber",        party:"R", url:"https://stauber.house.gov/contact" }
+  ],
+  MS: [
+    { district:1, name:"Trent Kelly",         party:"R", url:"https://trentkelly.house.gov/contact" },
+    { district:2, name:"Bennie G. Thompson",  party:"D", url:"https://benniethompson.house.gov/contact" },
+    { district:3, name:"Michael Guest",       party:"R", url:"https://guest.house.gov/contact" },
+    { district:4, name:"Mike Ezell",          party:"R", url:"https://ezell.house.gov/contact" }
+  ],
+  MO: [
+    { district:1, name:"Wesley Bell",         party:"D", url:"https://wesleybell.house.gov/contact" },
+    { district:2, name:"Ann Wagner",          party:"R", url:"https://wagner.house.gov/contact" },
+    { district:3, name:"Robert F. Onder Jr.", party:"R", url:"https://onder.house.gov/contact" },
+    { district:4, name:"Mark Alford",         party:"R", url:"https://alford.house.gov/contact" },
+    { district:5, name:"Emanuel Cleaver",     party:"D", url:"https://cleaver.house.gov/contact" },
+    { district:6, name:"Sam Graves",          party:"R", url:"https://graves.house.gov/contact" },
+    { district:7, name:"Eric Burlison",       party:"R", url:"https://burlison.house.gov/contact" },
+    { district:8, name:"Jason Smith",         party:"R", url:"https://jasonsmith.house.gov/contact" }
+  ],
+  MT: [
+    { district:1, name:"Ryan K. Zinke",       party:"R", url:"https://zinke.house.gov/contact" },
+    { district:2, name:"Troy Downing",        party:"R", url:"https://downing.house.gov/contact" }
+  ],
+  NE: [
+    { district:1, name:"Mike Flood",          party:"R", url:"https://flood.house.gov/contact" },
+    { district:2, name:"Don Bacon",           party:"R", url:"https://bacon.house.gov/contact" },
+    { district:3, name:"Adrian Smith",        party:"R", url:"https://adriansmith.house.gov/contact" }
+  ],
+  NV: [
+    { district:1, name:"Dina Titus",          party:"D", url:"https://titus.house.gov/contact" },
+    { district:2, name:"Mark E. Amodei",      party:"R", url:"https://amodei.house.gov/contact" },
+    { district:3, name:"Susie Lee",           party:"D", url:"https://susielee.house.gov/contact" },
+    { district:4, name:"Steven Horsford",     party:"D", url:"https://horsford.house.gov/contact" }
+  ],
+  NH: [
+    { district:1, name:"Chris Pappas",        party:"D", url:"https://pappas.house.gov/contact" },
+    { district:2, name:"Maggie Goodlander",   party:"D", url:"https://goodlander.house.gov/contact" }
+  ],
+  NJ: [
+    { district:1,  name:"Donald Norcross",    party:"D", url:"https://norcross.house.gov/contact" },
+    { district:2,  name:"Jefferson Van Drew", party:"R", url:"https://vandrew.house.gov/contact" },
+    { district:3,  name:"Herbert C. Conaway Jr.", party:"D", url:"https://conaway.house.gov/contact" },
+    { district:4,  name:"Christopher H. Smith",party:"R", url:"https://chrissmith.house.gov/contact" },
+    { district:5,  name:"Josh Gottheimer",    party:"D", url:"https://gottheimer.house.gov/contact" },
+    { district:6,  name:"Frank Pallone Jr.",  party:"D", url:"https://pallone.house.gov/contact" },
+    { district:7,  name:"Thomas H. Kean Jr.", party:"R", url:"https://kean.house.gov/contact" },
+    { district:8,  name:"Robert Menendez",    party:"D", url:"https://robertmenendez.house.gov/contact" },
+    { district:9,  name:"Nellie Pou",         party:"D", url:"https://pou.house.gov/contact" },
+    { district:10, name:"LaMonica McIver",    party:"D", url:"https://mcivers.house.gov/contact" },
+    { district:11, name:"Vacant",             party:"",  url:"https://www.house.gov/representatives/find-your-representative" },
+    { district:12, name:"Bonnie Watson Coleman", party:"D", url:"https://watsoncoleman.house.gov/contact" }
+  ],
+  NM: [
+    { district:1, name:"Melanie A. Stansbury",party:"D", url:"https://stansbury.house.gov/contact" },
+    { district:2, name:"Gabe Vasquez",        party:"D", url:"https://vasquez.house.gov/contact" },
+    { district:3, name:"Teresa Leger Fernandez", party:"D", url:"https://legerfernandez.house.gov/contact" }
+  ],
+  NY: [
+    { district:1,  name:"Nick LaLota",        party:"R", url:"https://lalota.house.gov/contact" },
+    { district:2,  name:"Andrew R. Garbarino",party:"R", url:"https://garbarino.house.gov/contact" },
+    { district:3,  name:"Thomas R. Suozzi",   party:"D", url:"https://suozzi.house.gov/contact" },
+    { district:4,  name:"Laura Gillen",       party:"D", url:"https://gillen.house.gov/contact" },
+    { district:5,  name:"Gregory W. Meeks",   party:"D", url:"https://meeks.house.gov/contact" },
+    { district:6,  name:"Grace Meng",         party:"D", url:"https://meng.house.gov/contact" },
+    { district:7,  name:"Nydia M. Velázquez", party:"D", url:"https://velazquez.house.gov/contact" },
+    { district:8,  name:"Hakeem S. Jeffries", party:"D", url:"https://jeffries.house.gov/contact" },
+    { district:9,  name:"Yvette D. Clarke",   party:"D", url:"https://yvetteclarke.house.gov/contact" },
+    { district:10, name:"Daniel S. Goldman",  party:"D", url:"https://goldman.house.gov/contact" },
+    { district:11, name:"Nicole Malliotakis", party:"R", url:"https://malliotakis.house.gov/contact" },
+    { district:12, name:"Jerrold Nadler",     party:"D", url:"https://nadler.house.gov/contact" },
+    { district:13, name:"Adriano Espaillat",  party:"D", url:"https://espaillat.house.gov/contact" },
+    { district:14, name:"Alexandria Ocasio-Cortez", party:"D", url:"https://ocasio-cortez.house.gov/contact" },
+    { district:15, name:"Ritchie Torres",     party:"D", url:"https://ritchietorres.house.gov/contact" },
+    { district:16, name:"George Latimer",     party:"D", url:"https://latimer.house.gov/contact" },
+    { district:17, name:"Michael Lawler",     party:"R", url:"https://lawler.house.gov/contact" },
+    { district:18, name:"Patrick Ryan",       party:"D", url:"https://patricknryan.house.gov/contact" },
+    { district:19, name:"Josh Riley",         party:"D", url:"https://riley.house.gov/contact" },
+    { district:20, name:"Paul Tonko",         party:"D", url:"https://tonko.house.gov/contact" },
+    { district:21, name:"Elise M. Stefanik",  party:"R", url:"https://stefanik.house.gov/contact" },
+    { district:22, name:"John W. Mannion",    party:"D", url:"https://mannion.house.gov/contact" },
+    { district:23, name:"Nicholas A. Langworthy", party:"R", url:"https://langworthy.house.gov/contact" },
+    { district:24, name:"Claudia Tenney",     party:"R", url:"https://tenney.house.gov/contact" },
+    { district:25, name:"Joseph D. Morelle",  party:"D", url:"https://morelle.house.gov/contact" },
+    { district:26, name:"Timothy M. Kennedy", party:"D", url:"https://timkennedy.house.gov/contact" }
+  ],
+  NC: [
+    { district:1,  name:"Donald G. Davis",    party:"D", url:"https://donalddavis.house.gov/contact" },
+    { district:2,  name:"Deborah K. Ross",    party:"D", url:"https://ross.house.gov/contact" },
+    { district:3,  name:"Gregory F. Murphy",  party:"R", url:"https://gregmurphy.house.gov/contact" },
+    { district:4,  name:"Valerie P. Foushee", party:"D", url:"https://foushee.house.gov/contact" },
+    { district:5,  name:"Virginia Foxx",      party:"R", url:"https://foxx.house.gov/contact" },
+    { district:6,  name:"Addison P. McDowell",party:"R", url:"https://mcdowell.house.gov/contact" },
+    { district:7,  name:"David Rouzer",       party:"R", url:"https://rouzer.house.gov/contact" },
+    { district:8,  name:"Mark Harris",        party:"R", url:"https://markharris.house.gov/contact" },
+    { district:9,  name:"Richard Hudson",     party:"R", url:"https://hudson.house.gov/contact" },
+    { district:10, name:"Pat Harrigan",       party:"R", url:"https://harrigan.house.gov/contact" },
+    { district:11, name:"Chuck Edwards",      party:"R", url:"https://chuckedwards.house.gov/contact" },
+    { district:12, name:"Alma S. Adams",      party:"D", url:"https://adams.house.gov/contact" },
+    { district:13, name:"Brad Knott",         party:"R", url:"https://knott.house.gov/contact" },
+    { district:14, name:"Tim Moore",          party:"R", url:"https://timmoore.house.gov/contact" }
+  ],
+  ND: [
+    { district:0, name:"Julie Fedorchak",     party:"R", url:"https://fedorchak.house.gov/contact" }
+  ],
+  OH: [
+    { district:1,  name:"Greg Landsman",      party:"D", url:"https://landsman.house.gov/contact" },
+    { district:2,  name:"David J. Taylor",    party:"R", url:"https://davidtaylor.house.gov/contact" },
+    { district:3,  name:"Joyce Beatty",       party:"D", url:"https://beatty.house.gov/contact" },
+    { district:4,  name:"Jim Jordan",         party:"R", url:"https://jordan.house.gov/contact" },
+    { district:5,  name:"Robert E. Latta",    party:"R", url:"https://latta.house.gov/contact" },
+    { district:6,  name:"Michael A. Rulli",   party:"R", url:"https://rulli.house.gov/contact" },
+    { district:7,  name:"Max L. Miller",      party:"R", url:"https://maxmiller.house.gov/contact" },
+    { district:8,  name:"Warren Davidson",    party:"R", url:"https://davidson.house.gov/contact" },
+    { district:9,  name:"Marcy Kaptur",       party:"D", url:"https://kaptur.house.gov/contact" },
+    { district:10, name:"Michael R. Turner",  party:"R", url:"https://turner.house.gov/contact" },
+    { district:11, name:"Shontel M. Brown",   party:"D", url:"https://shontelbrown.house.gov/contact" },
+    { district:12, name:"Troy Balderson",     party:"R", url:"https://balderson.house.gov/contact" },
+    { district:13, name:"Emilia Strong Sykes",party:"D", url:"https://sykes.house.gov/contact" },
+    { district:14, name:"David P. Joyce",     party:"R", url:"https://joyce.house.gov/contact" },
+    { district:15, name:"Mike Carey",         party:"R", url:"https://carey.house.gov/contact" }
+  ],
+  OK: [
+    { district:1, name:"Kevin Hern",          party:"R", url:"https://hern.house.gov/contact" },
+    { district:2, name:"Josh Brecheen",       party:"R", url:"https://brecheen.house.gov/contact" },
+    { district:3, name:"Frank D. Lucas",      party:"R", url:"https://lucas.house.gov/contact" },
+    { district:4, name:"Tom Cole",            party:"R", url:"https://cole.house.gov/contact" },
+    { district:5, name:"Stephanie I. Bice",   party:"R", url:"https://bice.house.gov/contact" }
+  ],
+  OR: [
+    { district:1, name:"Suzanne Bonamici",    party:"D", url:"https://bonamici.house.gov/contact" },
+    { district:2, name:"Cliff Bentz",         party:"R", url:"https://bentz.house.gov/contact" },
+    { district:3, name:"Maxine Dexter",       party:"D", url:"https://dexter.house.gov/contact" },
+    { district:4, name:"Val T. Hoyle",        party:"D", url:"https://hoyle.house.gov/contact" },
+    { district:5, name:"Janelle S. Bynum",    party:"D", url:"https://bynum.house.gov/contact" },
+    { district:6, name:"Andrea Salinas",      party:"D", url:"https://salinas.house.gov/contact" }
+  ],
+  PA: [
+    { district:1,  name:"Brian K. Fitzpatrick",party:"R", url:"https://fitzpatrick.house.gov/contact" },
+    { district:2,  name:"Brendan F. Boyle",   party:"D", url:"https://boyle.house.gov/contact" },
+    { district:3,  name:"Dwight Evans",       party:"D", url:"https://evans.house.gov/contact" },
+    { district:4,  name:"Madeleine Dean",     party:"D", url:"https://dean.house.gov/contact" },
+    { district:5,  name:"Mary Gay Scanlon",   party:"D", url:"https://scanlon.house.gov/contact" },
+    { district:6,  name:"Chrissy Houlahan",   party:"D", url:"https://houlahan.house.gov/contact" },
+    { district:7,  name:"Ryan Mackenzie",     party:"R", url:"https://mackenzie.house.gov/contact" },
+    { district:8,  name:"Robert P. Bresnahan Jr.", party:"R", url:"https://bresnahan.house.gov/contact" },
+    { district:9,  name:"Daniel Meuser",      party:"R", url:"https://meuser.house.gov/contact" },
+    { district:10, name:"Scott Perry",        party:"R", url:"https://perry.house.gov/contact" },
+    { district:11, name:"Lloyd Smucker",      party:"R", url:"https://smucker.house.gov/contact" },
+    { district:12, name:"Summer L. Lee",      party:"D", url:"https://summerlee.house.gov/contact" },
+    { district:13, name:"John Joyce",         party:"R", url:"https://johnjoyce.house.gov/contact" },
+    { district:14, name:"Guy Reschenthaler",  party:"R", url:"https://reschenthaler.house.gov/contact" },
+    { district:15, name:"Glenn Thompson",     party:"R", url:"https://thompson.house.gov/contact" },
+    { district:16, name:"Mike Kelly",         party:"R", url:"https://mikekelly.house.gov/contact" },
+    { district:17, name:"Christopher R. Deluzio", party:"D", url:"https://deluzio.house.gov/contact" }
+  ],
+  RI: [
+    { district:1, name:"Gabe Amo",            party:"D", url:"https://amo.house.gov/contact" },
+    { district:2, name:"Seth Magaziner",      party:"D", url:"https://magaziner.house.gov/contact" }
+  ],
+  SC: [
+    { district:1, name:"Nancy Mace",          party:"R", url:"https://mace.house.gov/contact" },
+    { district:2, name:"Joe Wilson",          party:"R", url:"https://joewilson.house.gov/contact" },
+    { district:3, name:"Sheri Biggs",         party:"R", url:"https://biggs.house.gov/contact" },
+    { district:4, name:"William R. Timmons IV",party:"R", url:"https://timmons.house.gov/contact" },
+    { district:5, name:"Ralph Norman",        party:"R", url:"https://norman.house.gov/contact" },
+    { district:6, name:"James E. Clyburn",    party:"D", url:"https://clyburn.house.gov/contact" },
+    { district:7, name:"Russell Fry",         party:"R", url:"https://fry.house.gov/contact" }
+  ],
+  SD: [
+    { district:0, name:"Dusty Johnson",       party:"R", url:"https://dustyjohnson.house.gov/contact" }
+  ],
+  TN: [
+    { district:1, name:"Diana Harshbarger",   party:"R", url:"https://harshbarger.house.gov/contact" },
+    { district:2, name:"Tim Burchett",        party:"R", url:"https://burchett.house.gov/contact" },
+    { district:3, name:"Chuck Fleischmann",   party:"R", url:"https://fleischmann.house.gov/contact" },
+    { district:4, name:"Scott DesJarlais",    party:"R", url:"https://desjarlais.house.gov/contact" },
+    { district:5, name:"Andrew Ogles",        party:"R", url:"https://ogles.house.gov/contact" },
+    { district:6, name:"John W. Rose",        party:"R", url:"https://johnrose.house.gov/contact" },
+    { district:7, name:"Matt Van Epps",       party:"R", url:"https://vanepps.house.gov/contact" },
+    { district:8, name:"David Kustoff",       party:"R", url:"https://kustoff.house.gov/contact" },
+    { district:9, name:"Steve Cohen",         party:"D", url:"https://cohen.house.gov/contact" }
+  ],
+  TX: [
+    { district:1,  name:"Nathaniel Moran",    party:"R", url:"https://moran.house.gov/contact" },
+    { district:2,  name:"Dan Crenshaw",       party:"R", url:"https://crenshaw.house.gov/contact" },
+    { district:3,  name:"Keith Self",         party:"R", url:"https://self.house.gov/contact" },
+    { district:4,  name:"Pat Fallon",         party:"R", url:"https://fallon.house.gov/contact" },
+    { district:5,  name:"Lance Gooden",       party:"R", url:"https://gooden.house.gov/contact" },
+    { district:6,  name:"Jake Ellzey",        party:"R", url:"https://ellzey.house.gov/contact" },
+    { district:7,  name:"Lizzie Fletcher",    party:"D", url:"https://fletcher.house.gov/contact" },
+    { district:8,  name:"Morgan Luttrell",    party:"R", url:"https://luttrell.house.gov/contact" },
+    { district:9,  name:"Al Green",           party:"D", url:"https://algreen.house.gov/contact" },
+    { district:10, name:"Michael T. McCaul",  party:"R", url:"https://mccaul.house.gov/contact" },
+    { district:11, name:"August Pfluger",     party:"R", url:"https://pfluger.house.gov/contact" },
+    { district:12, name:"Craig A. Goldman",   party:"R", url:"https://craiggoldman.house.gov/contact" },
+    { district:13, name:"Ronny Jackson",      party:"R", url:"https://jackson.house.gov/contact" },
+    { district:14, name:"Randy K. Weber Sr.", party:"R", url:"https://weber.house.gov/contact" },
+    { district:15, name:"Monica De La Cruz",  party:"R", url:"https://delacruz.house.gov/contact" },
+    { district:16, name:"Veronica Escobar",   party:"D", url:"https://escobar.house.gov/contact" },
+    { district:17, name:"Pete Sessions",      party:"R", url:"https://sessions.house.gov/contact" },
+    { district:18, name:"Vacant",             party:"",  url:"https://www.house.gov/representatives/find-your-representative" },
+    { district:19, name:"Jodey C. Arrington", party:"R", url:"https://arrington.house.gov/contact" },
+    { district:20, name:"Joaquin Castro",     party:"D", url:"https://castro.house.gov/contact" },
+    { district:21, name:"Chip Roy",           party:"R", url:"https://roy.house.gov/contact" },
+    { district:22, name:"Troy E. Nehls",      party:"R", url:"https://nehls.house.gov/contact" },
+    { district:23, name:"Tony Gonzales",      party:"R", url:"https://gonzales.house.gov/contact" },
+    { district:24, name:"Beth Van Duyne",     party:"R", url:"https://vanduyne.house.gov/contact" },
+    { district:25, name:"Roger Williams",     party:"R", url:"https://rogerwilliams.house.gov/contact" },
+    { district:26, name:"Brandon Gill",       party:"R", url:"https://gill.house.gov/contact" },
+    { district:27, name:"Michael Cloud",      party:"R", url:"https://cloud.house.gov/contact" },
+    { district:28, name:"Henry Cuellar",      party:"D", url:"https://cuellar.house.gov/contact" },
+    { district:29, name:"Sylvia R. Garcia",   party:"D", url:"https://sylviagarcia.house.gov/contact" },
+    { district:30, name:"Jasmine Crockett",   party:"D", url:"https://crockett.house.gov/contact" },
+    { district:31, name:"John R. Carter",     party:"R", url:"https://johncarter.house.gov/contact" },
+    { district:32, name:"Julie Johnson",      party:"D", url:"https://juliejohnson.house.gov/contact" },
+    { district:33, name:"Marc A. Veasey",     party:"D", url:"https://veasey.house.gov/contact" },
+    { district:34, name:"Vicente Gonzalez",   party:"D", url:"https://gonzalez.house.gov/contact" },
+    { district:35, name:"Greg Casar",         party:"D", url:"https://casar.house.gov/contact" },
+    { district:36, name:"Brian Babin",        party:"R", url:"https://babin.house.gov/contact" },
+    { district:37, name:"Lloyd Doggett",      party:"D", url:"https://doggett.house.gov/contact" },
+    { district:38, name:"Wesley Hunt",        party:"R", url:"https://hunt.house.gov/contact" }
+  ],
+  UT: [
+    { district:1, name:"Blake D. Moore",      party:"R", url:"https://blakemoore.house.gov/contact" },
+    { district:2, name:"Celeste Maloy",       party:"R", url:"https://maloy.house.gov/contact" },
+    { district:3, name:"Mike Kennedy",        party:"R", url:"https://mikekennedy.house.gov/contact" },
+    { district:4, name:"Burgess Owens",       party:"R", url:"https://owens.house.gov/contact" }
+  ],
+  VT: [
+    { district:0, name:"Becca Balint",        party:"D", url:"https://balint.house.gov/contact" }
+  ],
+  VA: [
+    { district:1,  name:"Robert J. Wittman",  party:"R", url:"https://wittman.house.gov/contact" },
+    { district:2,  name:"Jennifer A. Kiggans",party:"R", url:"https://kiggans.house.gov/contact" },
+    { district:3,  name:"Bobby Scott",        party:"D", url:"https://bobbyscott.house.gov/contact" },
+    { district:4,  name:"Jennifer L. McClellan",party:"D", url:"https://mcclellan.house.gov/contact" },
+    { district:5,  name:"John J. McGuire III",party:"R", url:"https://mcguire.house.gov/contact" },
+    { district:6,  name:"Ben Cline",          party:"R", url:"https://cline.house.gov/contact" },
+    { district:7,  name:"Eugene Simon Vindman",party:"D", url:"https://vindman.house.gov/contact" },
+    { district:8,  name:"Donald S. Beyer Jr.",party:"D", url:"https://beyer.house.gov/contact" },
+    { district:9,  name:"H. Morgan Griffith", party:"R", url:"https://morgangriffith.house.gov/contact" },
+    { district:10, name:"Suhas Subramanyam",  party:"D", url:"https://subramanyam.house.gov/contact" },
+    { district:11, name:"James R. Walkinshaw",party:"D", url:"https://walkinshaw.house.gov/contact" }
+  ],
+  WA: [
+    { district:1,  name:"Suzan K. DelBene",   party:"D", url:"https://delbene.house.gov/contact" },
+    { district:2,  name:"Rick Larsen",        party:"D", url:"https://ricklarsen.house.gov/contact" },
+    { district:3,  name:"Marie Gluesenkamp Perez", party:"D", url:"https://gluesenkampperez.house.gov/contact" },
+    { district:4,  name:"Dan Newhouse",       party:"R", url:"https://newhouse.house.gov/contact" },
+    { district:5,  name:"Michael Baumgartner",party:"R", url:"https://baumgartner.house.gov/contact" },
+    { district:6,  name:"Emily Randall",      party:"D", url:"https://randall.house.gov/contact" },
+    { district:7,  name:"Pramila Jayapal",    party:"D", url:"https://jayapal.house.gov/contact" },
+    { district:8,  name:"Kim Schrier",        party:"D", url:"https://schrier.house.gov/contact" },
+    { district:9,  name:"Adam Smith",         party:"D", url:"https://adamsmith.house.gov/contact" },
+    { district:10, name:"Marilyn Strickland", party:"D", url:"https://strickland.house.gov/contact" }
+  ],
+  WV: [
+    { district:1, name:"Carol D. Miller",     party:"R", url:"https://miller.house.gov/contact" },
+    { district:2, name:"Riley M. Moore",      party:"R", url:"https://rileymoore.house.gov/contact" }
+  ],
+  WI: [
+    { district:1, name:"Bryan Steil",         party:"R", url:"https://steil.house.gov/contact" },
+    { district:2, name:"Mark Pocan",          party:"D", url:"https://pocan.house.gov/contact" },
+    { district:3, name:"Derrick Van Orden",   party:"R", url:"https://vanorden.house.gov/contact" },
+    { district:4, name:"Gwen Moore",          party:"D", url:"https://gwenmoore.house.gov/contact" },
+    { district:5, name:"Scott Fitzgerald",    party:"R", url:"https://fitzgerald.house.gov/contact" },
+    { district:6, name:"Glenn Grothman",      party:"R", url:"https://grothman.house.gov/contact" },
+    { district:7, name:"Thomas P. Tiffany",   party:"R", url:"https://tiffany.house.gov/contact" },
+    { district:8, name:"Tony Wied",           party:"R", url:"https://wied.house.gov/contact" }
+  ],
+  WY: [
+    { district:0, name:"Harriet M. Hageman",  party:"R", url:"https://hageman.house.gov/contact" }
+  ]
+};
+
+// ── ZIP → CONGRESSIONAL DISTRICT lookup ──
+// Format: "ZIPCODE": "STATE-DISTRICT" (district 0 = at-large)
+// Built from census ZCTA-to-CD crosswalk data (119th Congress)
+// Only the most common zip→district mapping is stored where zip spans districts
+var ZIP_TO_DISTRICT = {
+  // ALABAMA
+  "35004":"AL-6","35005":"AL-6","35006":"AL-6","35007":"AL-6","35010":"AL-3",
+  "35014":"AL-6","35015":"AL-7","35016":"AL-5","35019":"AL-5","35020":"AL-7",
+  "35022":"AL-6","35023":"AL-6","35031":"AL-5","35033":"AL-6","35034":"AL-7",
+  "35035":"AL-6","35036":"AL-6","35040":"AL-6","35041":"AL-6","35042":"AL-7",
+  "35043":"AL-6","35044":"AL-3","35045":"AL-3","35046":"AL-3","35049":"AL-5",
+  "35051":"AL-6","35052":"AL-6","35053":"AL-4","35054":"AL-6","35055":"AL-5",
+  "35057":"AL-5","35058":"AL-5","35060":"AL-6","35061":"AL-7","35062":"AL-6",
+  "35063":"AL-4","35064":"AL-7","35068":"AL-6","35071":"AL-6","35072":"AL-3",
+  "35073":"AL-6","35077":"AL-5","35078":"AL-3","35079":"AL-5","35080":"AL-6",
+  "35082":"AL-3","35083":"AL-5","35085":"AL-3","35087":"AL-5","35089":"AL-3",
+  "35091":"AL-6","35094":"AL-6","35096":"AL-3","35097":"AL-5","35098":"AL-5",
+  "35111":"AL-6","35112":"AL-6","35114":"AL-6","35115":"AL-6","35116":"AL-6",
+  "35117":"AL-6","35118":"AL-7","35119":"AL-6","35120":"AL-6","35121":"AL-5",
+  "35124":"AL-6","35125":"AL-6","35126":"AL-6","35127":"AL-6","35128":"AL-3",
+  "35130":"AL-6","35131":"AL-3","35133":"AL-4","35135":"AL-6","35136":"AL-3",
+  "35143":"AL-6","35146":"AL-6","35147":"AL-6","35148":"AL-4","35150":"AL-3",
+  "35160":"AL-3","35161":"AL-3","35171":"AL-3","35172":"AL-6","35173":"AL-6",
+  "35175":"AL-5","35176":"AL-3","35178":"AL-6","35179":"AL-5","35180":"AL-6",
+  "35183":"AL-3","35184":"AL-7","35185":"AL-7","35186":"AL-6","35187":"AL-6",
+  "35188":"AL-7","35201":"AL-7","35202":"AL-7","35203":"AL-7","35204":"AL-7",
+  "35205":"AL-7","35206":"AL-7","35207":"AL-7","35208":"AL-7","35209":"AL-6",
+  "35210":"AL-6","35211":"AL-7","35212":"AL-7","35213":"AL-6","35214":"AL-6",
+  "35215":"AL-6","35216":"AL-6","35217":"AL-7","35218":"AL-7","35219":"AL-7",
+  "35220":"AL-7","35221":"AL-7","35222":"AL-7","35223":"AL-6","35224":"AL-7",
+  "35226":"AL-6","35228":"AL-7","35229":"AL-6","35231":"AL-7","35232":"AL-7",
+  "35233":"AL-7","35234":"AL-7","35235":"AL-6","35236":"AL-6","35237":"AL-7",
+  "35238":"AL-6","35242":"AL-6","35243":"AL-6","35244":"AL-6","35249":"AL-7",
+  "35253":"AL-7","35254":"AL-7","35255":"AL-7","35259":"AL-7","35260":"AL-7",
+  "35261":"AL-6","35270":"AL-7","35282":"AL-7","35283":"AL-7","35285":"AL-7",
+  "35287":"AL-7","35288":"AL-7","35289":"AL-7","35290":"AL-7","35291":"AL-7",
+  "35292":"AL-7","35293":"AL-7","35294":"AL-7","35295":"AL-7","35296":"AL-7",
+  "35297":"AL-7","35298":"AL-7","35401":"AL-7","35402":"AL-7","35403":"AL-7",
+  "35404":"AL-7","35405":"AL-7","35406":"AL-7","35407":"AL-7","35440":"AL-7",
+  "35441":"AL-7","35442":"AL-7","35443":"AL-7","35444":"AL-7","35446":"AL-7",
+  "35447":"AL-7","35448":"AL-7","35449":"AL-7","35452":"AL-7","35453":"AL-7",
+  "35456":"AL-7","35457":"AL-7","35458":"AL-7","35459":"AL-7","35460":"AL-7",
+  "35461":"AL-7","35462":"AL-7","35463":"AL-7","35464":"AL-7","35466":"AL-7",
+  "35469":"AL-7","35470":"AL-7","35473":"AL-7","35474":"AL-7","35475":"AL-7",
+  "35476":"AL-7","35477":"AL-7","35478":"AL-7","35480":"AL-7","35481":"AL-7",
+  "35482":"AL-7","35485":"AL-7","35486":"AL-7","35487":"AL-7","35490":"AL-7",
+  "35491":"AL-7","35501":"AL-4","35502":"AL-4","35503":"AL-4","35504":"AL-4",
+  "35540":"AL-4","35541":"AL-4","35542":"AL-4","35543":"AL-4","35544":"AL-4",
+  "35545":"AL-4","35546":"AL-4","35548":"AL-4","35549":"AL-4","35550":"AL-4",
+  "35551":"AL-4","35552":"AL-4","35553":"AL-4","35554":"AL-4","35555":"AL-4",
+  "35559":"AL-4","35560":"AL-4","35563":"AL-4","35564":"AL-4","35565":"AL-4",
+  "35570":"AL-4","35571":"AL-4","35572":"AL-4","35573":"AL-4","35574":"AL-4",
+  "35575":"AL-4","35576":"AL-4","35577":"AL-4","35578":"AL-4","35579":"AL-4",
+  "35580":"AL-4","35581":"AL-4","35582":"AL-4","35584":"AL-4","35585":"AL-4",
+  "35586":"AL-4","35587":"AL-4","35592":"AL-4","35593":"AL-4","35594":"AL-4",
+  "35601":"AL-5","35602":"AL-5","35603":"AL-5","35609":"AL-5","35610":"AL-5",
+  "35611":"AL-5","35612":"AL-5","35613":"AL-5","35614":"AL-5","35615":"AL-5",
+  "35616":"AL-5","35617":"AL-5","35618":"AL-5","35619":"AL-5","35620":"AL-5",
+  "35621":"AL-5","35622":"AL-5","35630":"AL-5","35631":"AL-5","35632":"AL-5",
+  "35633":"AL-5","35634":"AL-5","35640":"AL-5","35643":"AL-5","35645":"AL-5",
+  "35646":"AL-5","35647":"AL-5","35648":"AL-5","35649":"AL-5","35650":"AL-5",
+  "35651":"AL-5","35652":"AL-5","35653":"AL-4","35654":"AL-4","35660":"AL-5",
+  "35661":"AL-5","35662":"AL-5","35670":"AL-5","35671":"AL-5","35672":"AL-5",
+  "35673":"AL-5","35674":"AL-5","35677":"AL-5","35699":"AL-5","35739":"AL-5",
+  "35740":"AL-5","35741":"AL-5","35742":"AL-5","35744":"AL-5","35745":"AL-5",
+  "35746":"AL-5","35747":"AL-5","35748":"AL-5","35749":"AL-5","35750":"AL-5",
+  "35751":"AL-5","35752":"AL-5","35754":"AL-5","35755":"AL-5","35756":"AL-5",
+  "35757":"AL-5","35758":"AL-5","35759":"AL-5","35760":"AL-5","35761":"AL-5",
+  "35762":"AL-5","35763":"AL-5","35764":"AL-5","35765":"AL-5","35766":"AL-5",
+  "35767":"AL-5","35768":"AL-5","35769":"AL-5","35771":"AL-5","35772":"AL-5",
+  "35773":"AL-5","35774":"AL-5","35775":"AL-5","35776":"AL-5","35801":"AL-5",
+  "35802":"AL-5","35803":"AL-5","35804":"AL-5","35805":"AL-5","35806":"AL-5",
+  "35807":"AL-5","35808":"AL-5","35809":"AL-5","35810":"AL-5","35811":"AL-5",
+  "35812":"AL-5","35813":"AL-5","35814":"AL-5","35815":"AL-5","35816":"AL-5",
+  "35824":"AL-5","35896":"AL-5","35897":"AL-5","35898":"AL-5","35899":"AL-5",
+  "35901":"AL-3","35902":"AL-3","35903":"AL-3","35904":"AL-3","35905":"AL-3",
+  "35906":"AL-3","35907":"AL-3","35950":"AL-3","35951":"AL-3","35952":"AL-3",
+  "35953":"AL-3","35954":"AL-3","35956":"AL-3","35957":"AL-3","35958":"AL-5",
+  "35959":"AL-3","35960":"AL-3","35961":"AL-3","35962":"AL-3","35963":"AL-3",
+  "35964":"AL-3","35966":"AL-5","35967":"AL-3","35968":"AL-5","35971":"AL-3",
+  "35972":"AL-3","35973":"AL-3","35974":"AL-3","35975":"AL-3","35976":"AL-3",
+  "35978":"AL-5","35979":"AL-5","35980":"AL-3","35981":"AL-5","35983":"AL-3",
+  "35984":"AL-5","35986":"AL-3","35987":"AL-3","35988":"AL-5","35989":"AL-3",
+  "35990":"AL-3","36003":"AL-7","36005":"AL-2","36006":"AL-7","36008":"AL-7",
+  "36009":"AL-2","36010":"AL-2","36013":"AL-7","36015":"AL-2","36016":"AL-2",
+  "36017":"AL-2","36020":"AL-7","36022":"AL-3","36024":"AL-3","36025":"AL-7",
+  "36026":"AL-3","36027":"AL-3","36028":"AL-2","36029":"AL-3","36030":"AL-7",
+  "36031":"AL-2","36032":"AL-7","36033":"AL-2","36034":"AL-2","36035":"AL-2",
+  "36036":"AL-7","36037":"AL-2","36038":"AL-2","36039":"AL-3","36040":"AL-7",
+  "36041":"AL-2","36042":"AL-2","36043":"AL-7","36045":"AL-3","36046":"AL-2",
+  "36047":"AL-7","36048":"AL-2","36049":"AL-2","36051":"AL-3","36052":"AL-7",
+  "36053":"AL-2","36054":"AL-7","36057":"AL-7","36061":"AL-2","36062":"AL-2",
+  "36064":"AL-7","36065":"AL-7","36066":"AL-7","36067":"AL-7","36068":"AL-7",
+  "36069":"AL-2","36071":"AL-2","36072":"AL-2","36075":"AL-7","36078":"AL-3",
+  "36079":"AL-2","36080":"AL-7","36081":"AL-2","36082":"AL-2","36083":"AL-7",
+  "36087":"AL-3","36088":"AL-7","36089":"AL-3","36091":"AL-3","36092":"AL-7",
+  "36093":"AL-7","36101":"AL-7","36104":"AL-7","36105":"AL-7","36106":"AL-7",
+  "36107":"AL-7","36108":"AL-7","36109":"AL-7","36110":"AL-7","36111":"AL-7",
+  "36112":"AL-7","36113":"AL-7","36114":"AL-7","36115":"AL-7","36116":"AL-7",
+  "36117":"AL-7","36118":"AL-7","36119":"AL-7","36120":"AL-7","36121":"AL-7",
+  "36123":"AL-7","36124":"AL-7","36125":"AL-7","36130":"AL-7","36131":"AL-7",
+  "36132":"AL-7","36133":"AL-7","36134":"AL-7","36135":"AL-7","36140":"AL-7",
+  "36141":"AL-7","36142":"AL-7","36177":"AL-7","36191":"AL-7","36201":"AL-3",
+  "36202":"AL-3","36203":"AL-3","36204":"AL-3","36205":"AL-3","36206":"AL-3",
+  "36207":"AL-3","36210":"AL-3","36250":"AL-3","36251":"AL-3","36253":"AL-3",
+  "36255":"AL-3","36256":"AL-3","36258":"AL-3","36260":"AL-3","36261":"AL-3",
+  "36262":"AL-3","36263":"AL-3","36264":"AL-3","36265":"AL-3","36266":"AL-3",
+  "36267":"AL-3","36268":"AL-3","36269":"AL-3","36271":"AL-3","36272":"AL-3",
+  "36273":"AL-3","36274":"AL-3","36275":"AL-3","36276":"AL-3","36277":"AL-3",
+  "36278":"AL-3","36279":"AL-3","36280":"AL-3","36301":"AL-2","36302":"AL-2",
+  "36303":"AL-2","36304":"AL-2","36305":"AL-2","36310":"AL-2","36311":"AL-2",
+  "36312":"AL-2","36313":"AL-2","36314":"AL-2","36316":"AL-2","36317":"AL-2",
+  "36318":"AL-2","36319":"AL-2","36320":"AL-2","36321":"AL-2","36322":"AL-2",
+  "36323":"AL-2","36330":"AL-2","36331":"AL-2","36340":"AL-2","36343":"AL-2",
+  "36344":"AL-2","36345":"AL-2","36346":"AL-2","36349":"AL-2","36350":"AL-2",
+  "36351":"AL-2","36352":"AL-2","36353":"AL-2","36360":"AL-2","36361":"AL-2",
+  "36362":"AL-2","36370":"AL-2","36371":"AL-2","36373":"AL-2","36374":"AL-2",
+  "36375":"AL-2","36376":"AL-2","36401":"AL-2","36420":"AL-2","36421":"AL-2",
+  "36425":"AL-2","36426":"AL-2","36427":"AL-2","36429":"AL-2","36432":"AL-2",
+  "36435":"AL-7","36436":"AL-7","36439":"AL-2","36441":"AL-2","36442":"AL-2",
+  "36444":"AL-7","36445":"AL-2","36446":"AL-7","36448":"AL-2","36449":"AL-2",
+  "36451":"AL-7","36453":"AL-2","36454":"AL-2","36455":"AL-2","36456":"AL-2",
+  "36460":"AL-2","36461":"AL-2","36462":"AL-2","36467":"AL-2","36470":"AL-2",
+  "36471":"AL-7","36473":"AL-2","36474":"AL-2","36475":"AL-2","36476":"AL-2",
+  "36477":"AL-2","36480":"AL-2","36481":"AL-2","36482":"AL-2","36483":"AL-2",
+  "36501":"AL-1","36502":"AL-1","36503":"AL-1","36504":"AL-1","36505":"AL-1",
+  "36507":"AL-1","36509":"AL-1","36511":"AL-1","36512":"AL-1","36513":"AL-1",
+  "36515":"AL-1","36518":"AL-1","36521":"AL-1","36522":"AL-1","36523":"AL-1",
+  "36524":"AL-1","36525":"AL-1","36526":"AL-1","36527":"AL-1","36528":"AL-1",
+  "36529":"AL-1","36530":"AL-1","36532":"AL-1","36533":"AL-1","36535":"AL-1",
+  "36536":"AL-1","36538":"AL-1","36539":"AL-1","36540":"AL-1","36541":"AL-1",
+  "36542":"AL-1","36543":"AL-1","36544":"AL-1","36545":"AL-1","36547":"AL-1",
+  "36548":"AL-1","36549":"AL-1","36550":"AL-1","36551":"AL-1","36553":"AL-1",
+  "36555":"AL-1","36556":"AL-1","36558":"AL-1","36559":"AL-1","36560":"AL-1",
+  "36561":"AL-1","36562":"AL-1","36564":"AL-1","36567":"AL-1","36568":"AL-1",
+  "36569":"AL-1","36571":"AL-1","36572":"AL-1","36574":"AL-1","36575":"AL-1",
+  "36576":"AL-1","36577":"AL-1","36578":"AL-1","36579":"AL-1","36580":"AL-1",
+  "36581":"AL-1","36582":"AL-1","36583":"AL-1","36584":"AL-1","36585":"AL-1",
+  "36587":"AL-1","36590":"AL-1","36601":"AL-1","36602":"AL-1","36603":"AL-1",
+  "36604":"AL-1","36605":"AL-1","36606":"AL-1","36607":"AL-1","36608":"AL-1",
+  "36609":"AL-1","36610":"AL-1","36611":"AL-1","36612":"AL-1","36613":"AL-1",
+  "36615":"AL-1","36616":"AL-1","36617":"AL-1","36618":"AL-1","36619":"AL-1",
+  "36628":"AL-1","36633":"AL-1","36640":"AL-1","36641":"AL-1","36644":"AL-1",
+  "36652":"AL-1","36660":"AL-1","36663":"AL-1","36670":"AL-1","36671":"AL-1",
+  "36675":"AL-1","36685":"AL-1","36688":"AL-1","36689":"AL-1","36690":"AL-1",
+  "36691":"AL-1","36693":"AL-1","36695":"AL-1","36701":"AL-7","36703":"AL-7",
+  "36720":"AL-7","36722":"AL-7","36723":"AL-7","36726":"AL-7","36727":"AL-7",
+  "36728":"AL-7","36732":"AL-7","36736":"AL-7","36738":"AL-7","36740":"AL-7",
+  "36741":"AL-7","36742":"AL-7","36744":"AL-7","36745":"AL-7","36748":"AL-7",
+  "36749":"AL-7","36750":"AL-3","36751":"AL-7","36752":"AL-7","36753":"AL-7",
+  "36754":"AL-7","36756":"AL-7","36758":"AL-7","36759":"AL-7","36761":"AL-7",
+  "36762":"AL-7","36763":"AL-7","36764":"AL-7","36765":"AL-7","36766":"AL-7",
+  "36767":"AL-7","36768":"AL-7","36769":"AL-7","36773":"AL-7","36775":"AL-7",
+  "36776":"AL-7","36782":"AL-7","36783":"AL-7","36784":"AL-7","36785":"AL-7",
+  "36786":"AL-7","36790":"AL-7","36792":"AL-3","36793":"AL-7","36801":"AL-3",
+  "36804":"AL-3","36830":"AL-3","36832":"AL-3","36849":"AL-3","36850":"AL-3",
+  "36851":"AL-3","36852":"AL-3","36853":"AL-3","36854":"AL-3","36855":"AL-3",
+  "36856":"AL-3","36858":"AL-3","36860":"AL-2","36861":"AL-3","36862":"AL-3",
+  "36863":"AL-3","36865":"AL-3","36866":"AL-3","36867":"AL-3","36868":"AL-3",
+  "36869":"AL-3","36870":"AL-3","36871":"AL-3","36874":"AL-3","36875":"AL-3",
+  "36877":"AL-3","36879":"AL-3"
+};
+
+// ── Look up representative by zip code ──
+function getRepByZip(zip) {
+  if (!zip || zip.length < 5) return null;
+  var key = zip.substring(0, 5);
+  var mapping = ZIP_TO_DISTRICT[key];
+  if (!mapping) return null;
+  var parts = mapping.split("-");
+  var state = parts[0];
+  var district = parseInt(parts[1]);
+  if (!REPRESENTATIVES[state]) return null;
+  var rep = REPRESENTATIVES[state].find(function(r) { return r.district === district; });
+  return rep ? { state: state, rep: rep } : null;
+}
+
 // ── CONSTANTS ──
 var FDA_TO      = "commissioner@fda.hhs.gov";
 var FDA_CC_BASE = [
@@ -564,21 +1786,48 @@ window.handlePreviewEmail = function() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var repEmails = [];
-      if (data.officials) {
-        data.officials.forEach(function(o) {
-          if (o.emails && o.emails[0]) repEmails.push(o.emails[0]);
+      var civicRep  = null;
+
+      if (data.offices && data.officials) {
+        data.offices.forEach(function(office) {
+          var roles = office.roles || [];
+          var isLower = roles.indexOf("legislatorLowerBody") !== -1;
+          var isUpper = roles.indexOf("legislatorUpperBody") !== -1;
+          var indices = office.officialIndices || [];
+
+          indices.forEach(function(i) {
+            var o = data.officials[i];
+            if (!o) return;
+
+            // Collect emails for CC
+            if (o.emails && o.emails[0]) repEmails.push(o.emails[0]);
+
+            // Capture House rep info
+            if (isLower) {
+              var repUrl = "https://www.house.gov/representatives/find-your-representative";
+              if (o.urls && o.urls.length > 0) {
+                repUrl = o.urls[0].replace(/\/+$/, "") + "/contact";
+              }
+              civicRep = {
+                name:  o.name || "Your Representative",
+                party: o.party === "Democratic" ? "D" : o.party === "Republican" ? "R" : "I",
+                url:   repUrl
+              };
+            }
+          });
         });
       }
-      sendEmail(name, relation, phone, personal, repEmails);
+
+      sendEmail(name, relation, phone, personal, repEmails, zip, civicRep);
     })
     .catch(function() {
       // API failed — proceed without reps, just FDA contacts
-      notice.innerHTML = '<div class="notice info">Could not look up representatives automatically — your email will still go to all FDA leadership.</div>';
-      sendEmail(name, relation, phone, personal, []);
+      notice.innerHTML = '';
+      sendEmail(name, relation, phone, personal, [], zip, null);
     });
 };
 
-function sendEmail(name, relation, phone, personal, repEmails) {
+function sendEmail(name, relation, phone, personal, repEmails, zip, civicRep) {
   var btn   = document.getElementById("preview-email-btn");
   var ccList = FDA_CC_BASE.concat(repEmails);
   var ccStr  = ccList.join(", ");
@@ -601,6 +1850,62 @@ function sendEmail(name, relation, phone, personal, repEmails) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
   incrementCount();
+
+  // ── Populate senators + rep box ──
+  var result = getSenatorsByZip(zip);
+  var box    = document.getElementById("senators-box");
+  var list   = document.getElementById("senators-list");
+  var stLine = document.getElementById("senators-state-line");
+
+  if (result.senators.length > 0) {
+    var stateName = STATE_NAMES[result.state] || result.state;
+    stLine.textContent = "Based on your zip code (" + zip + "), your state is: " + stateName;
+
+    // Build senator cards
+    var cards = result.senators.map(function(s, i) {
+      var partyClass = "party-" + s.party;
+      var partyLabel = s.party === "D" ? "Democrat" : s.party === "R" ? "Republican" : "Independent";
+      return '<div class="senator-card">' +
+        '<div class="senator-info">' +
+          '<div class="senator-name">Sen. ' + s.name + '</div>' +
+          '<div class="senator-meta"><span class="' + partyClass + '">' + partyLabel + '</span> &nbsp;·&nbsp; ' + stateName + ' (U.S. Senate)</div>' +
+        '</div>' +
+        '<div class="senator-actions">' +
+          '<button class="btn-senator-copy" data-senator-copy="' + i + '">📋 Copy Message</button>' +
+          '<a class="btn-senator-form" href="' + s.url + '" target="_blank">Open Contact Form ↗</a>' +
+        '</div>' +
+      '</div>';
+    });
+
+    // Build rep card — civicRep from API is primary source.
+    // Fallback: show a generic link so the card always appears.
+    var repData = civicRep || {
+      name:  "Your House Representative",
+      party: "",
+      url:   "https://www.house.gov/representatives/find-your-representative"
+    };
+    if (repData && repData.name && repData.name !== "Vacant") {
+      var rPartyClass = "party-" + (repData.party || "R");
+      var rPartyLabel = repData.party === "D" ? "Democrat" : repData.party === "R" ? "Republican" : "Independent";
+      cards.push(
+        '<div class="senator-card">' +
+        '<div class="senator-info">' +
+          '<div class="senator-name">Rep. ' + repData.name + '</div>' +
+          '<div class="senator-meta"><span class="' + rPartyClass + '">' + rPartyLabel + '</span> &nbsp;·&nbsp; ' + stateName + ' (U.S. House)</div>' +
+        '</div>' +
+        '<div class="senator-actions">' +
+          '<button class="btn-senator-copy" data-senator-copy="rep">📋 Copy Message</button>' +
+          '<a class="btn-senator-form" href="' + repData.url + '" target="_blank">Open Contact Form ↗</a>' +
+        '</div>' +
+        '</div>'
+      );
+    }
+
+    list.innerHTML = cards.join("");
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
 }
 
 // ── SOCIAL SHARING ──
@@ -721,6 +2026,29 @@ document.addEventListener("DOMContentLoaded", function() {
     range.selectNodeContents(ebt);
     sel.removeAllRanges();
     sel.addRange(range);
+  });
+
+  // Senator copy buttons — event delegation (avoids inline onclick scope issues)
+  document.addEventListener("click", function(e) {
+    var btn = e.target.closest("[data-senator-copy]");
+    if (!btn) return;
+    var body = window._lastEmailBody || "";
+    navigator.clipboard.writeText(body).then(function() {
+      btn.textContent = "✓ Copied!";
+      btn.classList.add("copied");
+      setTimeout(function() {
+        btn.textContent = "📋 Copy Message";
+        btn.classList.remove("copied");
+      }, 2500);
+    }).catch(function() {
+      fallbackCopy(body);
+      btn.textContent = "✓ Copied!";
+      btn.classList.add("copied");
+      setTimeout(function() {
+        btn.textContent = "📋 Copy Message";
+        btn.classList.remove("copied");
+      }, 2500);
+    });
   });
 });
 </script>
