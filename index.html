@@ -1855,8 +1855,7 @@ function sendEmail(name, relation, phone, personal, repEmails, zip, civicRep) {
     + "?cc="      + encodeURIComponent(ccStr)
     + "&bcc="     + encodeURIComponent("eehoops@gmail.com")
     + "&subject=" + encodeURIComponent(EMAIL_SUBJECT);
-  document.getElementById("btn-open-email-app").href   = mailtoHref;
-  document.getElementById("btn-open-email-app-2").href = mailtoHref;
+  document.getElementById("btn-open-email-app").href = mailtoHref;
 
   // ── Switch to email page ──
   document.getElementById("page-form").style.display  = "none";
