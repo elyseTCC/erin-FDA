@@ -261,19 +261,18 @@
     font-size: 13px; color: var(--text-light); margin-bottom: 18px;
   }
   .senator-card {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px;
+    display: flex; flex-direction: column; gap: 12px;
     padding: 14px 16px; border: 1px solid var(--border);
     border-radius: 3px; margin-bottom: 10px;
     background: var(--cream);
   }
-  .senator-info { flex: 1; min-width: 180px; }
   .senator-name { font-weight: 700; font-size: 15px; color: var(--text-dark); }
   .senator-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
   .party-D { color: #1a56b0; font-weight: 700; }
   .party-R { color: #b01a1a; font-weight: 700; }
   .party-I { color: #6a4fb0; font-weight: 700; }
   .senator-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .senator-actions > * { flex: 1; text-align: center; justify-content: center; }
   .btn-senator-form {
     background: var(--deep-teal); color: white; border: none;
     padding: 9px 16px; border-radius: 3px; cursor: pointer;
@@ -431,11 +430,6 @@
     <div class="email-body-card">
       <h3>Email Body <span style="font-size:12px;font-weight:400;color:var(--text-light);">(click to select all)</span></h3>
       <div id="email-body-text"></div>
-    </div>
-
-    <div class="email-action-bar">
-      <button class="btn-copy" id="btn-copy-body-2">📋 Copy Email Body</button>
-      <a class="btn-open-email" id="btn-open-email-app-2" href="#">✉️ Open Email App</a>
     </div>
 
     <!-- SENATORS BOX -->
@@ -1895,17 +1889,22 @@ function sendEmail(name, relation, phone, personal, repEmails, zip, civicRep) {
       url:   "https://www.house.gov/representatives/find-your-representative"
     };
     if (repData && repData.name && repData.name !== "Vacant") {
+      var isFallbackRep = !civicRep;
+      var rNameDisplay = isFallbackRep ? "Representative ???" : "Rep. " + repData.name;
       var rPartyClass = "party-" + (repData.party || "R");
       var rPartyLabel = repData.party === "D" ? "Democrat" : repData.party === "R" ? "Republican" : "Independent";
+      var rMeta = isFallbackRep
+        ? '<div class="senator-meta">' + stateName + ' (U.S. House)</div>'
+        : '<div class="senator-meta"><span class="' + rPartyClass + '">' + rPartyLabel + '</span> &nbsp;·&nbsp; ' + stateName + ' (U.S. House)</div>';
       cards.push(
         '<div class="senator-card">' +
         '<div class="senator-info">' +
-          '<div class="senator-name">Rep. ' + repData.name + '</div>' +
-          '<div class="senator-meta"><span class="' + rPartyClass + '">' + rPartyLabel + '</span> &nbsp;·&nbsp; ' + stateName + ' (U.S. House)</div>' +
+          '<div class="senator-name">' + rNameDisplay + '</div>' +
+          rMeta +
         '</div>' +
         '<div class="senator-actions">' +
           '<button class="btn-senator-copy" data-senator-copy="rep">📋 Copy Message</button>' +
-          '<a class="btn-senator-form" href="' + repData.url + '" target="_blank">Open Contact Form ↗</a>' +
+          '<a class="btn-senator-form" href="' + repData.url + '" target="_blank">' + (isFallbackRep ? "Find your rep ↗" : "Open Contact Form ↗") + '</a>' +
         '</div>' +
         '</div>'
       );

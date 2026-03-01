@@ -33,7 +33,7 @@ Erin Hoops has Spinocerebellar Ataxia Type 3 (SCA3) — a fatal, progressive neu
 
 There is a waiver petition pending that could be approved today.
 
-**Contact Erin:** eehoops@gmail.com | 925-963-7087
+**Contact Erin:** eehoops@gmail.com | [phone number]
 
 ---
 
