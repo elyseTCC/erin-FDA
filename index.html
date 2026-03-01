@@ -227,6 +227,7 @@
     padding: 15px 28px; border-radius: 3px; cursor: pointer;
     font-family: 'Source Serif 4', serif; font-size: 16px; font-weight: 600;
     transition: background 0.2s, transform 0.1s; text-align: center;
+    display: inline-block; text-decoration: none;
   }
   .btn-open-email:hover { background: var(--teal); }
   .btn-open-email:active { transform: translateY(1px); }
@@ -260,19 +261,18 @@
     font-size: 13px; color: var(--text-light); margin-bottom: 18px;
   }
   .senator-card {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px;
+    display: flex; flex-direction: column; gap: 12px;
     padding: 14px 16px; border: 1px solid var(--border);
     border-radius: 3px; margin-bottom: 10px;
     background: var(--cream);
   }
-  .senator-info { flex: 1; min-width: 180px; }
   .senator-name { font-weight: 700; font-size: 15px; color: var(--text-dark); }
   .senator-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
   .party-D { color: #1a56b0; font-weight: 700; }
   .party-R { color: #b01a1a; font-weight: 700; }
   .party-I { color: #6a4fb0; font-weight: 700; }
   .senator-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .senator-actions > * { flex: 1; text-align: center; justify-content: center; }
   .btn-senator-form {
     background: var(--deep-teal); color: white; border: none;
     padding: 9px 16px; border-radius: 3px; cursor: pointer;
@@ -345,7 +345,7 @@
     <p>Spinocerebellar ataxia (SCA) is a group of hereditary neurodegenerative diseases caused by the progressive degeneration of the cerebellum — the part of the brain that controls movement and coordination. There are more than 40 known genetic subtypes, and together they affect an estimated 150,000 Americans.</p>
     <div class="pull-quote">"Because the brain cannot regenerate, every day without treatment means irreversible loss — of movement, independence, and time."</div>
     <p>Early symptoms include difficulty walking, impaired balance, slurred speech, and problems with fine motor tasks such as writing or swallowing. Over time, patients lose the ability to walk independently and often require a wheelchair. Many subtypes also affect vision, cognition, and the ability to speak or swallow safely.</p>
-    <p>SCA is relentlessly progressive. There is currently <strong>no FDA-approved therapy and no cure</strong> for any subtype. Most patients experience a steady decline over 10–25 years, with significantly reduced life expectancy depending on the subtype. SCA Type 3 (SCA3), the most common form worldwide, is typically fatal, with patients often dying in their 50s or 60s from complications such as aspiration pneumonia.</p>
+    <p>SCA is relentlessly progressive. There is currently <strong>no FDA-approved therapy and no cure</strong> for any subtype. Most patients experience a steady decline over 10–25 years, with significantly reduced life expectancy depending on the subtype. SCA Type 3 (SCA3), the most common form worldwide, is typically fatal, with patients often dying in their 50s or 60s from complications such as aspiration pneumonia. Erin's dad Chris died at 44 years old.</p>
     <p>Because the brain does not regenerate lost neurons, <strong>every delay in treatment translates directly into permanent, unrecoverable decline.</strong> This is why regulatory flexibility — and drugs like Troriluzole — matter so urgently for patients like Erin.</p>
   </div>
 
@@ -424,7 +424,7 @@
 
     <div class="email-action-bar">
       <button class="btn-copy" id="btn-copy-body">📋 Copy Email Body</button>
-      <button class="btn-open-email" id="btn-open-email-app">✉️ Open Email App</button>
+      <a class="btn-open-email" id="btn-open-email-app" href="#">✉️ Open Email App</a>
     </div>
 
     <div class="email-body-card">
@@ -432,9 +432,14 @@
       <div id="email-body-text"></div>
     </div>
 
-    <div class="email-action-bar">
-      <button class="btn-copy" id="btn-copy-body-2">📋 Copy Email Body</button>
-      <button class="btn-open-email" id="btn-open-email-app-2">✉️ Open Email App</button>
+    <!-- SENATORS BOX -->
+    <div class="senators-box" id="senators-box" style="display:none;">
+      <h3>📬 Also Contact Your Senators &amp; Representative</h3>
+      <p class="subtitle" id="senators-state-line">Based on your zip code</p>
+      <div id="senators-list"></div>
+      <div class="senators-tip">
+        💡 <strong>Tip:</strong> For each contact, click <em>📋 Copy Message</em> first, then <em>Open Contact Form ↗</em>. Paste your message into their <strong>Message</strong> field and submit!
+      </div>
     </div>
 
     <!-- SENATORS BOX -->
@@ -1619,17 +1624,19 @@ function getRepByZip(zip) {
 }
 
 // ── CONSTANTS ──
-var FDA_TO      = "commissioner@fda.hhs.gov";
-var FDA_CC_BASE = [
+var FDA_TO      = ["commissioner@fda.hhs.gov",
   "steven.kozlowski@fda.hhs.gov",
   "kaveeta.vasisht@fda.hhs.gov",
   "TracyBeth.Hoeg@fda.hhs.gov",
   "vinayak.Prasad@fda.hhs.gov",
-  "druginfo@fda.hhs.gov"
+  "druginfo@fda.hhs.gov"]
+var CC_BASE = [
+  "Thomas_greco@padilla.senate.gov", 
+  "colin_kruse@schiff.senate.gov"
 ];
 var EMAIL_SUBJECT = "Urgent: Approve Troriluzole with Regulatory Flexibility";
 var PAGE_URL      = window.location.href;
-var SHARE_TEXT    = "Help Erin & the SCA community! Send a 60-second pre-filled email to FDA leadership urging approval of Troriluzole for Spinocerebellar Ataxia. Please share!";
+var SHARE_TEXT    = "Help Erin & the SCA community! Send an email to FDA leadership urging approval of Troriluzole for Spinocerebellar Ataxia. Please share!";
 
 // ── ACTION COUNTER ──
 function loadCount() {
@@ -1666,10 +1673,15 @@ loadCount();
 function buildEmailBody(name, relation, phone, personalMsg) {
   var personalBlock = personalMsg
     ? "\n" + personalMsg + "\n\n"
-    : "";
+    : "\n";
 
-  return "Dear FDA Leadership,\n\n"
-    + "My name is " + name + " and I am writing on behalf of my " + relation + " Erin Hoops, who is a patient with a rare disease. We call these diseases \"rare\" because each one is a disease with fewer than 200,000 patients. However, there are more than 7,000 such diseases with over 30 million patients in the US, so as a whole they aren't so rare.\n\n"
+  return "Dear FDA Leadership,\n"
+    + personalBlock
+    + "My name is " + name + " and I am writing on behalf of " + (relation ? "my" + relation + " " : "") + "Erin Hoops, who is a patient with a rare disease. We call these diseases \"rare\" because each one is a disease with fewer than 200,000 patients. However, there are more than 7,000 such diseases with over 30 million patients in the US, so as a whole they aren't so rare.\n\n"
+    + "We need urgent action from the FDA: \n\n"
+    + "   1. Approve Troriluzole today by accepting the waiver petition. Troriluzole is completely safe. Patients and doctors see it working. This is an easy win.\n"
+    + "   2. Review the recent rare disease CRLs. If a drug is safe, approve it. If an application for a safe drug needs additional data, work with the developer to get this data after the approval. Our friends' and children's brains don't have time for perfect science — our loved ones are not guinea pigs. Congress recognizes this and granted the FDA regulatory flexibility. Please use this flexibility to help make a difference in millions of lives.\n\n"
+    + "\n"
     + "Dr. Makary recently said he wants to see meaningful treatment for neurodegenerative disorders within the next year. Troriluzole is one such treatment, let's get it approved!\n\n"
     + "Erin has spinocerebellar ataxia type 3 (SCA3), a rare neurodegenerative disease that affects balance, coordination and all voluntary movements including speech and swallowing. There is currently no approved therapy and no cure for this disease.\n\n"
     + "In her 20s, she was a basketball coach, Coach Hoops. She loved teaching the game and life lessons through the sport she loves. Unfortunately, due to the disease, she lost the ability to run and catch, so she can no longer coach.\n\n"
@@ -1680,12 +1692,7 @@ function buildEmailBody(name, relation, phone, personalMsg) {
     + "Again, this drug is completely safe. It is an improved version of an ALS drug called riluzole, which has been approved for 30 years.\n\n"
     + "Congress has given the FDA the power to use regulatory flexibility for rare diseases and we need Makary and the FDA to make that happen. I'm begging the FDA to focus on safety data and allow patients to decide if the drug is working for them. Patients like Erin, whose dad died from the disease at 44, don't have years to wait for another clinical trial. Not to mention the cost to the manufacturer and the disincentive for rare disease drug development when approval is nearly impossible.\n\n"
     + "There is a waiver request for her drug, Troriluzole, which could be approved today. There are also 23 other rare disease drugs that were issued complete response letter (CRL) rejections from the FDA since 2025. Makary and the FDA could make 2026 a landmark year by figuring out how to get these drugs across the finish line.\n\n"
-    + "We need urgent action from the FDA. This can be a win for patients as well as proof that the new process at the FDA works.\n\n"
-    + "   1. Approve Troriluzole today by accepting the waiver petition. Troriluzole is completely safe. Patients and doctors see it working. This is an easy win.\n"
-    + "   2. Review the recent rare disease CRLs. If a drug is safe, approve it. If an application for a safe drug needs additional data, work with the developer to get this data after the approval. Our friends' and children's brains don't have time for perfect science — our loved ones are not guinea pigs. Congress recognizes this and granted the FDA regulatory flexibility. Please use this flexibility to help make a difference in millions of lives.\n\n"
-    + personalBlock
-    + "\n"
-    + "Thank you so much for your time and consideration.\n\n"
+    + "This can be a win for patients as well as proof that the new process at the FDA works. Thank you so much for your time and consideration.\n\n"
     + "Sincerely,\n"
     + name + "\n"
     + (phone ? phone + "\n" : "")
@@ -1754,7 +1761,7 @@ function showPasteReminder() { /* no-op — handled by email page now */ }
 window.handlePreviewEmail = function() {
   var name     = document.getElementById("your-name").value.trim();
   var zip      = document.getElementById("zip-code").value.trim();
-  var relation = document.getElementById("relationship").value.trim() || "friend";
+  var relation = document.getElementById("relationship").value.trim();
   var phone    = document.getElementById("your-phone").value.trim();
   var personal = document.getElementById("personal-story").value.trim();
   var notice   = document.getElementById("form-notice");
@@ -1829,7 +1836,7 @@ window.handlePreviewEmail = function() {
 
 function sendEmail(name, relation, phone, personal, repEmails, zip, civicRep) {
   var btn   = document.getElementById("preview-email-btn");
-  var ccList = FDA_CC_BASE.concat(repEmails);
+  var ccList = CC_BASE.concat(repEmails);
   var ccStr  = ccList.join(", ");
   var body   = buildEmailBody(name, relation, phone, personal);
 
@@ -1840,9 +1847,16 @@ function sendEmail(name, relation, phone, personal, repEmails, zip, civicRep) {
   btn.innerHTML = "✉️ Generate Message";
 
   // ── Populate email page ──
-  document.getElementById("ep-to").textContent = FDA_TO;
+  document.getElementById("ep-to").textContent = FDA_TO.join(", ");
   document.getElementById("ep-cc").textContent = ccStr;
   document.getElementById("email-body-text").textContent = body;
+
+  var mailtoHref = "mailto:" + FDA_TO.join(", ")
+    + "?cc="      + encodeURIComponent(ccStr)
+    + "&bcc="     + encodeURIComponent("eehoops@gmail.com")
+    + "&subject=" + encodeURIComponent(EMAIL_SUBJECT);
+  document.getElementById("btn-open-email-app").href   = mailtoHref;
+  document.getElementById("btn-open-email-app-2").href = mailtoHref;
 
   // ── Switch to email page ──
   document.getElementById("page-form").style.display  = "none";
@@ -1885,17 +1899,22 @@ function sendEmail(name, relation, phone, personal, repEmails, zip, civicRep) {
       url:   "https://www.house.gov/representatives/find-your-representative"
     };
     if (repData && repData.name && repData.name !== "Vacant") {
+      var isFallbackRep = !civicRep;
+      var rNameDisplay = isFallbackRep ? "Representative ???" : "Rep. " + repData.name;
       var rPartyClass = "party-" + (repData.party || "R");
       var rPartyLabel = repData.party === "D" ? "Democrat" : repData.party === "R" ? "Republican" : "Independent";
+      var rMeta = isFallbackRep
+        ? '<div class="senator-meta">' + stateName + ' (U.S. House)</div>'
+        : '<div class="senator-meta"><span class="' + rPartyClass + '">' + rPartyLabel + '</span> &nbsp;·&nbsp; ' + stateName + ' (U.S. House)</div>';
       cards.push(
         '<div class="senator-card">' +
         '<div class="senator-info">' +
-          '<div class="senator-name">Rep. ' + repData.name + '</div>' +
-          '<div class="senator-meta"><span class="' + rPartyClass + '">' + rPartyLabel + '</span> &nbsp;·&nbsp; ' + stateName + ' (U.S. House)</div>' +
+          '<div class="senator-name">' + rNameDisplay + '</div>' +
+          rMeta +
         '</div>' +
         '<div class="senator-actions">' +
           '<button class="btn-senator-copy" data-senator-copy="rep">📋 Copy Message</button>' +
-          '<a class="btn-senator-form" href="' + repData.url + '" target="_blank">Open Contact Form ↗</a>' +
+          '<a class="btn-senator-form" href="' + repData.url + '" target="_blank">' + (isFallbackRep ? "Find your rep ↗" : "Open Contact Form ↗") + '</a>' +
         '</div>' +
         '</div>'
       );
@@ -1986,30 +2005,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  function doOpenEmailApp() {
-    var mailto = "mailto:" + FDA_TO
-      + "?cc="      + encodeURIComponent(window._lastCcStr || "")
-      + "&bcc="     + encodeURIComponent("eehoops@gmail.com")
-      + "&subject=" + encodeURIComponent(EMAIL_SUBJECT);
-    var a = document.createElement("a");
-    a.href = mailto;
-    a.style.cssText = "position:fixed;top:-999px;left:-999px;";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function(){ if(a.parentNode) a.parentNode.removeChild(a); }, 2000);
-  }
-
   var bc1 = document.getElementById("btn-copy-body");
   if (bc1) bc1.addEventListener("click", function(){ doCopyBody(bc1); });
 
   var bc2 = document.getElementById("btn-copy-body-2");
   if (bc2) bc2.addEventListener("click", function(){ doCopyBody(bc2); });
-
-  var oe1 = document.getElementById("btn-open-email-app");
-  if (oe1) oe1.addEventListener("click", doOpenEmailApp);
-
-  var oe2 = document.getElementById("btn-open-email-app-2");
-  if (oe2) oe2.addEventListener("click", doOpenEmailApp);
 
   var bb = document.getElementById("btn-back");
   if (bb) bb.addEventListener("click", function() {
